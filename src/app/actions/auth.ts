@@ -13,7 +13,16 @@ import type { User } from "@/lib/db/schema";
 /** Accounts require a subscription. Returns only if the user may sign in now; otherwise redirects to checkout (or an error). */
 async function requireSubscription(u: User, interval: ReturnType<typeof parseInterval>, back: (m: string) => never) {
   if (u.plan === "pro" || u.isAdmin) return;
-  if (stripeEnabled()) redirect(await createCheckout(u, interval, { signIn: true }));
+  if (stripeEnabled()) {
+    let url: string;
+    try {
+      url = await createCheckout(u, interval, { signIn: true });
+    } catch (e) {
+      console.error("checkout failed", e);
+      redirect(`/login?error=${encodeURIComponent("We couldn't start checkout. Please try signing in again in a moment.")}`);
+    }
+    redirect(url);
+  }
   if (devBillingAllowed()) {
     await db.update(users).set({ plan: "pro", subscriptionStatus: "trialing", planInterval: interval }).where(eq(users.id, u.id)); // dev only: no payment
     return;

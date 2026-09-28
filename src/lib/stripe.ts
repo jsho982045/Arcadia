@@ -30,7 +30,8 @@ export async function createCheckout(user: User, interval: Interval, opts: { sig
     cancel_url: opts.signIn ? `${config.appOrigin}/login?error=${encodeURIComponent("A subscription is required to sign in. Your free trial starts at checkout.")}` : `${config.appOrigin}/pro`,
     client_reference_id: user.id,
     allow_promotion_codes: true,
-    automatic_tax: { enabled: process.env.STRIPE_AUTOMATIC_TAX === "true" },
+    // Stripe Managed Payments (on by default) handles tax itself and rejects automatic_tax=false, so only send it when explicitly enabled.
+    ...(process.env.STRIPE_AUTOMATIC_TAX === "true" ? { automatic_tax: { enabled: true } } : {}),
   });
   return session.url!;
 }
