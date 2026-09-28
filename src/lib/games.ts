@@ -175,7 +175,7 @@ export async function createGame(opts: {
   isSeed?: boolean;
   publishNow?: boolean;
 }) {
-  const manifest = readManifest(opts.files);
+  const manifest = readManifest(opts.files) as ReturnType<typeof readManifest> & { freeToPlay?: boolean };
   const title = (opts.title || manifest.title || "Untitled game").slice(0, 80);
   const checks = runChecks(opts.files);
   if (checks.status === "fail") {
@@ -199,6 +199,7 @@ export async function createGame(opts: {
     thumbnail: thumb,
     orientation: manifest.orientation === "portrait" ? "portrait" : "landscape",
     isSeed: !!opts.isSeed,
+    freeToPlay: !!opts.isSeed && !!manifest.freeToPlay,
   });
   await createVersion({ gameId: id, authorId: opts.owner.id, message: "First release", files: opts.files, checks });
   const [g] = await db.select().from(games).where(eq(games.id, id));

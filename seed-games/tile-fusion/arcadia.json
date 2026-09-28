@@ -9,5 +9,6 @@
   "orientation": "portrait",
   "description": "Slide the board and merge matching numbers. Can you build a 2048 tile? Your game is saved, so you can come back to it any time.",
   "instructions": "Arrow keys / WASD or swipe. R starts a new game.",
-  "thumbnail": "thumb.svg"
+  "thumbnail": "thumb.svg",
+  "freeToPlay": true
 }

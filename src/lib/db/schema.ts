@@ -30,6 +30,9 @@ export const users = pgTable("users", {
   plan: text("plan").notNull().default("free"), // free | pro
   stripeCustomerId: text("stripe_customer_id"),
   stripeSubscriptionId: text("stripe_subscription_id"),
+  planInterval: text("plan_interval"), // month | year
+  subscriptionStatus: text("subscription_status"), // Stripe status: trialing | active | past_due | canceled ...
+  trialEndsAt: timestamp("trial_ends_at", { withTimezone: true }),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
@@ -55,6 +58,7 @@ export const games = pgTable(
     reviewNote: text("review_note"),
     license: text("license").notNull().default("arcadia-remix"),
     allowPrs: boolean("allow_prs").notNull().default(true),
+    freeToPlay: boolean("free_to_play").notNull().default(false), // playable without a subscription
     contributorShare: integer("contributor_share").notNull().default(20), // % of game earnings for contributors
     thumbnail: text("thumbnail"), // path inside the tree
     orientation: text("orientation").notNull().default("landscape"),

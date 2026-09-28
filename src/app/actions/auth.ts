@@ -6,6 +6,20 @@ import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema";
 import { createSession, destroySession, hashPassword, verifyPassword } from "@/lib/auth";
 import { newId } from "@/lib/ids";
+import { devBillingAllowed, parseInterval, stripeEnabled } from "@/lib/config";
+import { createCheckout } from "@/lib/stripe";
+import type { User } from "@/lib/db/schema";
+
+/** Accounts require a subscription. Returns only if the user may sign in now; otherwise redirects to checkout (or an error). */
+async function requireSubscription(u: User, interval: ReturnType<typeof parseInterval>, back: (m: string) => never) {
+  if (u.plan === "pro" || u.isAdmin) return;
+  if (stripeEnabled()) redirect(await createCheckout(u, interval, { signIn: true }));
+  if (devBillingAllowed()) {
+    await db.update(users).set({ plan: "pro", subscriptionStatus: "trialing", planInterval: interval }).where(eq(users.id, u.id)); // dev only: no payment
+    return;
+  }
+  back("Subscriptions aren't open yet. Please check back soon.");
+}
 
 function safeNext(next: FormDataEntryValue | null) {
   const n = typeof next === "string" ? next : "";
@@ -33,6 +47,8 @@ export async function signup(form: FormData) {
   if (taken.length) return back("That username or email is already in use.");
   const id = newId();
   await db.insert(users).values({ id, username, email, displayName: String(form.get("displayName") || username).slice(0, 40) || username, passwordHash: await hashPassword(password) });
+  const [created] = await db.select().from(users).where(eq(users.id, id));
+  await requireSubscription(created, parseInterval(form.get("interval")), back);
   await createSession(id);
   redirect(next);
 }
@@ -46,6 +62,7 @@ export async function login(form: FormData) {
     redirect(`/login?error=${encodeURIComponent("Wrong username or password.")}&next=${encodeURIComponent(next)}`);
   }
   if (u.banned) redirect(`/login?error=${encodeURIComponent("This account has been suspended.")}`);
+  await requireSubscription(u, parseInterval(form.get("interval")), (m) => redirect(`/login?error=${encodeURIComponent(m)}`));
   await createSession(u.id);
   redirect(next);
 }

@@ -8,6 +8,7 @@
   ],
   "orientation": "landscape",
   "description": "Smash every brick with a glowing paddle and ball. Catch power-ups for a wider paddle or triple balls. Each level adds tougher bricks and new layouts.",
-  "instructions": "Move with the mouse, touch, or \u2190 \u2192. Tap or press Space to launch the ball.",
-  "thumbnail": "thumb.svg"
+  "instructions": "Move with the mouse, touch, or ← →. Tap or press Space to launch the ball.",
+  "thumbnail": "thumb.svg",
+  "freeToPlay": true
 }

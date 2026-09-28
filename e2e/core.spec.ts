@@ -10,7 +10,7 @@ async function signup(page: Page, username: string) {
   await page.fill("#password", "password123");
   await page.check('input[name="age"]');
   await page.check('input[name="terms"]');
-  await page.click('button:has-text("Create account")');
+  await page.click('button:has-text("Continue to start free trial")');
   await page.waitForURL("/");
 }
 
@@ -103,27 +103,29 @@ test("publish a zip → review queue → admin approves", async ({ page, browser
   await ctx.close();
 });
 
-test("play time is tracked and Pro removes the cap", async ({ page }) => {
+test("visitors play free games only; subscribers play everything", async ({ page, browser }) => {
+  const beatFor = (p: Page, id: string | null) =>
+    p.evaluate(async (gid) => {
+      const r = await fetch("/api/play/heartbeat", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ gameId: gid }) });
+      return { status: r.status, body: await r.json() };
+    }, id);
+  // Visitor: free game is playable and tracked against the daily allowance...
+  await page.goto("/g/arcadia/neon-serpent");
+  const freeId = await page.locator("[data-game-id]").getAttribute("data-game-id");
+  const first = await beatFor(page, freeId);
+  expect(first.body.credited).toBe(15);
+  expect(first.body.remaining).toBe(30 * 60 - 15);
+  expect((await beatFor(page, freeId)).body.credited).toBe(0); // rate-limited
+  // ...but a subscriber-only game is locked.
+  await page.goto("/g/arcadia/gem-swap");
+  await expect(page.locator("text=This game is for subscribers")).toBeVisible();
+  // Signing in without a subscription is not possible: signup goes through the trial (dev mode grants it without a card).
   await signup(page, `player${uid}`);
   await page.goto("/g/arcadia/gem-swap");
-  const gameId = await page.locator("[data-game-id]").getAttribute("data-game-id");
-  const beat = () =>
-    page.evaluate(async (id) => {
-      const r = await fetch("/api/play/heartbeat", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ gameId: id }) });
-      return r.json();
-    }, gameId);
-  const first = await beat();
-  expect(first.credited).toBe(15);
-  expect(first.remaining).toBe(30 * 60 - 15);
-  // A second heartbeat straight away is rate-limited (no double counting).
-  expect((await beat()).credited).toBe(0);
-
-  await page.goto("/pro");
-  await page.click('button:has-text("Activate Pro")');
-  await expect(page.locator("text=Welcome to Pro")).toBeVisible();
+  const paidId = await page.locator("[data-game-id]").getAttribute("data-game-id");
+  const paid = await beatFor(page, paidId);
+  expect(paid.status).toBe(200);
+  expect(paid.body.remaining).toBeNull();
   await expect(page.locator("header").getByText("PRO", { exact: true })).toBeVisible();
-  await page.waitForTimeout(12_500);
-  const pro = await beat();
-  expect(pro.credited).toBe(15);
-  expect(pro.remaining).toBeNull();
+  void browser;
 });

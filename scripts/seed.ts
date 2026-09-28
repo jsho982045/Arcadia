@@ -36,7 +36,7 @@ async function main() {
   const adminPw = process.env.SEED_ADMIN_PASSWORD || "arcadia-admin";
   const team = await mkUser("arcadia", "Arcadia Team", adminPw, { isAdmin: true, trusted: true, bio: "The team behind Arcadia. We made the first few games; the rest is up to you." });
   const pat = await mkUser("pixelpat", "Pixel Pat", "password123", { bio: "I fix bugs in other people's games for fun." });
-  const maya = await mkUser("mayaplays", "Maya", "password123", { plan: "pro", bio: "Puzzle games forever." });
+  const maya = await mkUser("mayaplays", "Maya", "password123", { plan: "pro", subscriptionStatus: "trialing", planInterval: "year", bio: "Puzzle games forever." });
 
   const order = ["brick-blitz", "neon-serpent", "tile-fusion", "sky-hopper", "neon-drift", "gem-swap"];
   const made: Record<string, Awaited<ReturnType<typeof createGame>>> = {};

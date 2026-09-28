@@ -1,7 +1,7 @@
 import { and, eq, gte, lt, sql, inArray } from "drizzle-orm";
 import { db } from "./db";
 import { games, playLedger, pullRequests, users } from "./db/schema";
-import { config } from "./config";
+import { config, monthlyValueCents, parseInterval, type Interval } from "./config";
 
 export function today() {
   return new Date().toISOString().slice(0, 10);
@@ -77,7 +77,12 @@ export async function computeCreatorPool(month?: string) {
     .where(and(gte(playLedger.day, start), lt(playLedger.day, end), sql`${playLedger.proSeconds} > 0`))
     .groupBy(playLedger.playerKey, playLedger.gameId);
 
-  const perSubscriberCents = config.proPriceCents * (1 - config.paymentFeeRate) * config.creatorPoolShare;
+  const playerIds = [...new Set(rows.map((r) => r.playerKey))];
+  const intervals = new Map<string, Interval>();
+  if (playerIds.length) {
+    for (const u of await db.select({ id: users.id, i: users.planInterval }).from(users).where(inArray(users.id, playerIds))) intervals.set(u.id, parseInterval(u.i));
+  }
+  const centsFor = (playerKey: string) => monthlyValueCents(intervals.get(playerKey) ?? "month") * (1 - config.paymentFeeRate) * config.creatorPoolShare;
   const byPlayer = new Map<string, { gameId: string; secs: number }[]>();
   for (const r of rows) {
     if (!byPlayer.has(r.playerKey)) byPlayer.set(r.playerKey, []);
@@ -85,10 +90,10 @@ export async function computeCreatorPool(month?: string) {
   }
   const gameCents = new Map<string, number>();
   const gameSeconds = new Map<string, number>();
-  for (const list of byPlayer.values()) {
+  for (const [playerKey, list] of byPlayer) {
     const total = list.reduce((a, b) => a + b.secs, 0);
     for (const { gameId, secs } of list) {
-      gameCents.set(gameId, (gameCents.get(gameId) ?? 0) + (perSubscriberCents * secs) / total);
+      gameCents.set(gameId, (gameCents.get(gameId) ?? 0) + (centsFor(playerKey) * secs) / total);
       gameSeconds.set(gameId, (gameSeconds.get(gameId) ?? 0) + secs);
     }
   }
@@ -110,7 +115,10 @@ export async function computeCreatorPool(month?: string) {
       for (const c of contribs) earnings.set(c.userId, (earnings.get(c.userId) ?? 0) + (contribPool * Number(c.pts)) / totalPts);
     }
   }
-  return { subscribers: byPlayer.size, gameCents, gameSeconds, earnings, perSubscriberCents };
+  let poolCents = 0;
+  for (const k of byPlayer.keys()) poolCents += centsFor(k);
+  const perSubscriberCents = byPlayer.size ? poolCents / byPlayer.size : 0;
+  return { subscribers: byPlayer.size, gameCents, gameSeconds, earnings, perSubscriberCents, poolCents };
 }
 
 export async function gameMinutes(gameIds: string[], month?: string) {

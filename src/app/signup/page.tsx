@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { signup } from "@/app/actions/auth";
 import { ErrorNote } from "@/components/ui";
+import { config, stripeEnabled } from "@/lib/config";
 import { SubmitButton } from "@/components/SubmitButton";
 
 export const metadata = { title: "Join" };
@@ -9,8 +10,10 @@ export default async function SignupPage({ searchParams }: { searchParams: Promi
   const sp = await searchParams;
   return (
     <div className="mx-auto mt-12 max-w-md">
-      <h1 className="h-display text-3xl font-extrabold">Join free</h1>
-      <p className="mb-6 mt-1 text-muted">Play every game, save your progress, publish your own and help improve others.</p>
+      <h1 className="h-display text-3xl font-extrabold">Join Arcadia</h1>
+      <p className="mb-6 mt-1 text-muted">
+        Start your {config.trialDays}-day free trial. Play every game, publish your own and help improve others. Anyone can browse and play the free games without an account.
+      </p>
       <form action={signup} className="card space-y-4 p-6">
         <ErrorNote message={sp.error} />
         <input type="hidden" name="next" value={sp.next ?? "/"} />
@@ -32,6 +35,19 @@ export default async function SignupPage({ searchParams }: { searchParams: Promi
           <label className="label" htmlFor="password">Password</label>
           <input id="password" name="password" type="password" className="input" autoComplete="new-password" required minLength={8} />
         </div>
+        <fieldset className="grid grid-cols-2 gap-3">
+          <legend className="label">Plan ({config.trialDays}-day free trial on both)</legend>
+          <label className="card cursor-pointer p-3 text-sm has-[:checked]:border-brand">
+            <input type="radio" name="interval" value="month" defaultChecked className="mr-2 accent-[#7c5cff]" />
+            <b>${config.proMonthlyCents / 100}</b> / month
+          </label>
+          <label className="card cursor-pointer p-3 text-sm has-[:checked]:border-brand">
+            <input type="radio" name="interval" value="year" className="mr-2 accent-[#7c5cff]" />
+            <b>${config.proYearlyCents / 100}</b> / year
+            <span className="block text-xs text-ok">2 months free</span>
+          </label>
+        </fieldset>
+        {!stripeEnabled() && <p className="text-xs text-dim">Payments aren&apos;t connected on this server, so no card is taken.</p>}
         <label className="flex items-start gap-2 text-sm text-muted">
           <input type="checkbox" name="age" className="mt-1 accent-[#7c5cff]" required /> I am 13 years old or older.
         </label>
@@ -42,7 +58,7 @@ export default async function SignupPage({ searchParams }: { searchParams: Promi
             <Link href="/guidelines" className="link">Community Guidelines</Link>.
           </span>
         </label>
-        <SubmitButton className="btn-primary w-full" pendingText="Creating account…">Create account</SubmitButton>
+        <SubmitButton className="btn-primary w-full" pendingText="Creating account…">Continue to start free trial</SubmitButton>
       </form>
       <p className="mt-4 text-center text-sm text-muted">
         Already have an account? <Link href="/login" className="link">Sign in</Link>

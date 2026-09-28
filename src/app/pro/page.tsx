@@ -10,9 +10,9 @@ export const metadata = { title: "Pro" };
 export default async function ProPage({ searchParams }: { searchParams: Promise<{ success?: string; cancelled?: string; error?: string }> }) {
   const sp = await searchParams;
   const user = await getUser();
-  const price = (config.proPriceCents / 100).toFixed(2);
+  const monthly = config.proMonthlyCents / 100;
+  const yearly = config.proYearlyCents / 100;
   const isPro = user?.plan === "pro";
-  const freeMin = Math.round(config.freeDailySeconds / 60);
   return (
     <div className="mx-auto mt-12 max-w-4xl space-y-10">
       <div className="text-center">
@@ -29,32 +29,32 @@ export default async function ProPage({ searchParams }: { searchParams: Promise<
 
       <div className="grid gap-6 md:grid-cols-2">
         <div className="card p-7">
-          <p className="h-display text-xl font-bold">Free</p>
+          <p className="h-display text-xl font-bold">Visitor</p>
           <p className="h-display mt-2 text-4xl font-black">$0</p>
           <ul className="mt-6 space-y-2 text-sm text-muted">
-            <li>✓ Every game on the site</li>
-            <li>✓ {freeMin} minutes of play a day</li>
-            <li>✓ Publish games, open issues and pull requests</li>
-            <li>✓ Leaderboards and cloud saves</li>
+            <li>✓ Browse every game and profile</li>
+            <li>✓ Play the free games, no account needed</li>
+            <li>✗ No account: sign-in needs a subscription</li>
           </ul>
-          {!user && <Link href="/signup" className="btn-ghost mt-8 w-full">Join free</Link>}
         </div>
         <div className="card relative overflow-hidden border-brand/50 p-7">
           <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-brand/30 blur-3xl" />
           <p className="h-display text-xl font-bold text-brand">Pro</p>
           <p className="h-display mt-2 text-4xl font-black">
-            ${price}
+            ${monthly}
             <span className="text-base font-medium text-muted"> / month</span>
           </p>
+          <p className="mt-1 text-sm text-muted">or ${yearly} / year (2 months free) · {config.trialDays}-day free trial on both</p>
           <ul className="mt-6 space-y-2 text-sm">
-            <li>✓ Unlimited play, every game</li>
+            <li>✓ Every game on the site, unlimited play</li>
+            <li>✓ Publish games, fork, open issues and pull requests</li>
             <li>✓ Half of your subscription goes to creators you play</li>
             <li>✓ PRO badge on your profile and comments</li>
             <li>✓ Early access to new releases</li>
           </ul>
           <div className="mt-8">
             {!user ? (
-              <Link href="/signup?next=/pro" className="btn-primary w-full">Create an account to subscribe</Link>
+              <Link href="/signup?next=/pro" className="btn-primary w-full">Start your free trial</Link>
             ) : isPro ? (
               <form action={manageBilling}>
                 <SubmitButton className="btn-ghost w-full">{stripeEnabled() ? "Manage billing" : "Cancel Pro (dev mode)"}</SubmitButton>
@@ -62,14 +62,18 @@ export default async function ProPage({ searchParams }: { searchParams: Promise<
             ) : !stripeEnabled() && !devBillingAllowed() ? (
               <button disabled className="btn-ghost w-full">Pro is coming soon</button>
             ) : (
-              <form action={startCheckout}>
+              <form action={startCheckout} className="space-y-2">
+                <select name="interval" className="input" defaultValue="month" aria-label="Billing period">
+                  <option value="month">${monthly} / month</option>
+                  <option value="year">${yearly} / year (2 months free)</option>
+                </select>
                 <SubmitButton className="btn-primary w-full" pendingText="Redirecting…">
-                  {stripeEnabled() ? `Subscribe for $${price}/month` : "Activate Pro (dev mode, no payment)"}
+                  {stripeEnabled() ? `Start ${config.trialDays}-day free trial` : "Activate Pro (dev mode, no payment)"}
                 </SubmitButton>
               </form>
             )}
             {devBillingAllowed() && <p className="mt-2 text-center text-xs text-dim">Stripe isn&apos;t configured, so this toggles Pro for testing.</p>}
-            <p className="mt-2 text-center text-xs text-dim">Cancel any time. Renews monthly until you cancel.</p>
+            <p className="mt-2 text-center text-xs text-dim">Cancel any time before the trial ends and you won&apos;t be charged.</p>
           </div>
         </div>
       </div>

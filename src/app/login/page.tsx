@@ -24,7 +24,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
         <SubmitButton className="btn-primary w-full" pendingText="Signing in…">Sign in</SubmitButton>
       </form>
       <p className="mt-4 text-center text-sm text-muted">
-        New here? <Link href={`/signup${sp.next ? `?next=${encodeURIComponent(sp.next)}` : ""}`} className="link">Create a free account</Link>
+        New here? <Link href={`/signup${sp.next ? `?next=${encodeURIComponent(sp.next)}` : ""}`} className="link">Start your free trial</Link>
       </p>
     </div>
   );

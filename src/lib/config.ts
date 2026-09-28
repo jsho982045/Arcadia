@@ -8,8 +8,11 @@ export const config = {
 
   /** Free players get this many seconds of active play per day (across all games). */
   freeDailySeconds: Number(process.env.FREE_DAILY_SECONDS || 30 * 60),
-  /** Pro price in cents per month, used for the creator-pool estimate. */
-  proPriceCents: Number(process.env.PRO_PRICE_CENTS || 599),
+  /** Subscription prices in cents (also used for the creator-pool estimate). */
+  proMonthlyCents: Number(process.env.PRO_MONTHLY_CENTS || 500),
+  proYearlyCents: Number(process.env.PRO_YEARLY_CENTS || 5000),
+  /** Free trial length for both plans, applied at checkout. */
+  trialDays: Number(process.env.TRIAL_DAYS || 30),
   /** Share of net subscription revenue paid to creators. */
   creatorPoolShare: Number(process.env.CREATOR_POOL_SHARE || 0.5),
   /** Rough payment-processing cost used to go from gross to net. */
@@ -26,10 +29,17 @@ export const config = {
 
   stripeSecretKey: process.env.STRIPE_SECRET_KEY || "",
   stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET || "",
-  stripePriceId: process.env.STRIPE_PRICE_ID || "",
+  stripePriceMonthly: process.env.STRIPE_PRICE_MONTHLY || process.env.STRIPE_PRICE_ID || "",
+  stripePriceYearly: process.env.STRIPE_PRICE_YEARLY || "",
 };
 
-export const stripeEnabled = () => Boolean(config.stripeSecretKey && config.stripePriceId);
+export type Interval = "month" | "year";
+export const parseInterval = (v: unknown): Interval => (v === "year" ? "year" : "month");
+/** What one subscriber is worth per month, in cents. */
+export const monthlyValueCents = (i: Interval) => (i === "year" ? config.proYearlyCents / 12 : config.proMonthlyCents);
+export const priceIdFor = (i: Interval) => (i === "year" && config.stripePriceYearly ? config.stripePriceYearly : config.stripePriceMonthly);
+
+export const stripeEnabled = () => Boolean(config.stripeSecretKey && config.stripePriceMonthly && config.stripePriceYearly);
 /** Without Stripe, a "dev mode" button toggles Pro for testing. Off in production unless ALLOW_DEV_BILLING=true. */
 export const devBillingAllowed = () => !stripeEnabled() && (process.env.NODE_ENV !== "production" || process.env.ALLOW_DEV_BILLING === "true");
 

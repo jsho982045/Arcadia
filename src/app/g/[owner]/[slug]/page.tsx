@@ -66,7 +66,16 @@ export default async function GamePage({ params, searchParams }: { params: Promi
           <div className="rounded-xl border border-bad/40 bg-bad/10 px-4 py-3 text-sm text-bad">Not approved: {game.reviewNote}</div>
         )}
 
-        {version ? (
+        {version && live && !isPro && !game.freeToPlay && game.ownerId !== viewer?.id ? (
+          <div className="card flex flex-col items-center gap-3 p-10 text-center">
+            <p className="h-display text-2xl font-bold">This game is for subscribers</p>
+            <p className="max-w-md text-muted">
+              Start a {config.trialDays}-day free trial to play every game, from ${config.proMonthlyCents / 100}/month. Half of it goes to the creators you play.
+            </p>
+            <Link href={viewer ? "/pro" : `/signup?next=${encodeURIComponent(`/g/${owner.username}/${game.slug}`)}`} className="btn-primary">Start free trial</Link>
+            <p className="text-xs text-dim">Or try one of the free games on the home page.</p>
+          </div>
+        ) : version ? (
           <Player
             gameId={game.id}
             versionId={version.id}

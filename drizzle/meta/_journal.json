@@ -8,6 +8,13 @@
       "when": 1790611325899,
       "tag": "0000_lonely_tarot",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1790628266645,
+      "tag": "0001_spicy_wendigo",
+      "breakpoints": true
     }
   ]
 }

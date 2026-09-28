@@ -5,7 +5,7 @@ A modern browser arcade where anyone can **play**, **publish** and **improve** g
 - Play instantly in the browser (desktop and mobile), with leaderboards and cloud saves.
 - Publish any HTML5 game as a zip, or start from a template and code in the browser.
 - Fork any game, edit it in the in-browser editor, and open a **pull request** with a playable preview and a line-by-line diff. The owner merges with one click.
-- Free players get 30 minutes of play a day; **Pro** is unlimited. 50% of net subscription revenue goes to creators by active play time, and merged contributors share in each game's earnings.
+- Visitors can browse and play the free games without an account. An account needs a subscription: **$5/month or $50/year, both with a 30-day free trial**. 50% of net subscription revenue goes to creators by active play time, and merged contributors share in each game's earnings.
 
 "Arcadia" is a placeholder name. Change it with `NEXT_PUBLIC_APP_NAME`.
 
@@ -133,18 +133,18 @@ One Railway service runs both servers from the `Dockerfile`, with a Railway Post
    | `NEXT_PUBLIC_PLAY_ORIGIN` | `https://<game domain>` |
    | `SEED_DEMO` | `true` (loads the 6 games + demo users once) |
    | `SEED_ADMIN_PASSWORD` | a strong password for the `arcadia` admin account |
-   | `STRIPE_SECRET_KEY`, `STRIPE_PRICE_ID`, `STRIPE_WEBHOOK_SECRET` | from Stripe (below) |
+   | `STRIPE_SECRET_KEY`, `STRIPE_PRICE_MONTHLY`, `STRIPE_PRICE_YEARLY`, `STRIPE_WEBHOOK_SECRET` | from Stripe (below) |
 
    Railway redeploys automatically. Every push to `main` deploys again. Migrations run on each start.
 
 6. **Stripe** (start in *test mode*):
-   - *Product catalog → Add product* "Arcadia Pro", recurring, $5.99/month → copy the **Price ID** (`price_…`).
+   - Switch to a **Sandbox**. *Product catalog → Add product* "Arcadia Pro" with two recurring prices, $5.00/month and $50.00/year → copy both **Price IDs** (`price_…`). The 30-day trial is applied in code at checkout.
    - *Developers → API keys* → copy the **Secret key** (`sk_test_…`).
    - *Developers → Webhooks → Add endpoint*: `https://<site domain>/api/stripe/webhook`, events `checkout.session.completed`, `customer.subscription.created`, `customer.subscription.updated`, `customer.subscription.deleted` → copy the **Signing secret** (`whsec_…`).
    - *Settings → Billing → Customer portal* → **Activate** (for "Manage billing").
    - Test with card `4242 4242 4242 4242`, any future date, any CVC. When ready, repeat with live keys.
 
-Without Stripe keys the Pro button shows "coming soon" in production (set `ALLOW_DEV_BILLING=true` to enable the no-payment test toggle).
+Signup and sign-in go through Stripe Checkout; the account is signed in only after the trial subscription exists. Without Stripe keys the Pro button shows "coming soon" in production (set `ALLOW_DEV_BILLING=true` to enable the no-payment test toggle).
 
 **Domains:** the free `*.up.railway.app` domains are fine for testing. For launch, buy two real domains (about $10/year each), one for the site and one for games, and add them as custom domains with the same target ports.
 

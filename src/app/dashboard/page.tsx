@@ -42,7 +42,7 @@ export default async function Dashboard() {
       <div className="grid gap-4 sm:grid-cols-3">
         <Stat label="Active play this month" value={`${Math.round(totalMinutes).toLocaleString()} min`} />
         <Stat label="Estimated earnings" value={money(myEarnings)} hint="Your share of the creator pool, including contributor earnings" />
-        <Stat label="Creator pool this month" value={money(pool.subscribers * pool.perSubscriberCents)} hint={`${pool.subscribers} active Pro subscribers × ${money(pool.perSubscriberCents)} each`} />
+        <Stat label="Creator pool this month" value={money(pool.poolCents)} hint={`${pool.subscribers} active Pro subscribers × ${money(pool.perSubscriberCents)} on average`} />
       </div>
 
       <section>

@@ -4,10 +4,10 @@ import { eq } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema";
 import { requireUser } from "@/lib/auth";
-import { devBillingAllowed, stripeEnabled } from "@/lib/config";
+import { devBillingAllowed, parseInterval, stripeEnabled } from "@/lib/config";
 import { createCheckout, createPortal } from "@/lib/stripe";
 
-export async function startCheckout() {
+export async function startCheckout(form?: FormData) {
   const user = await requireUser("/pro");
   if (!stripeEnabled()) {
     // Dev mode: no Stripe keys configured, so flip the plan directly for testing.
@@ -15,7 +15,7 @@ export async function startCheckout() {
     await db.update(users).set({ plan: "pro" }).where(eq(users.id, user.id));
     redirect("/pro?success=1");
   }
-  redirect(await createCheckout(user));
+  redirect(await createCheckout(user, parseInterval(form?.get("interval"))));
 }
 
 export async function manageBilling() {
