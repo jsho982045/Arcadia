@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getUser } from "@/lib/auth";
-import { config, stripeEnabled } from "@/lib/config";
+import { config, devBillingAllowed, stripeEnabled } from "@/lib/config";
 import { manageBilling, startCheckout } from "@/app/actions/billing";
 import { ErrorNote } from "@/components/ui";
 import { SubmitButton } from "@/components/SubmitButton";
@@ -59,6 +59,8 @@ export default async function ProPage({ searchParams }: { searchParams: Promise<
               <form action={manageBilling}>
                 <SubmitButton className="btn-ghost w-full">{stripeEnabled() ? "Manage billing" : "Cancel Pro (dev mode)"}</SubmitButton>
               </form>
+            ) : !stripeEnabled() && !devBillingAllowed() ? (
+              <button disabled className="btn-ghost w-full">Pro is coming soon</button>
             ) : (
               <form action={startCheckout}>
                 <SubmitButton className="btn-primary w-full" pendingText="Redirecting…">
@@ -66,7 +68,7 @@ export default async function ProPage({ searchParams }: { searchParams: Promise<
                 </SubmitButton>
               </form>
             )}
-            {!stripeEnabled() && <p className="mt-2 text-center text-xs text-dim">Stripe isn&apos;t configured, so this toggles Pro for testing.</p>}
+            {devBillingAllowed() && <p className="mt-2 text-center text-xs text-dim">Stripe isn&apos;t configured, so this toggles Pro for testing.</p>}
             <p className="mt-2 text-center text-xs text-dim">Cancel any time. Renews monthly until you cancel.</p>
           </div>
         </div>

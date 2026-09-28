@@ -7,7 +7,7 @@
     "dev:app": "next dev -p 3002",
     "play": "node play-server/server.mjs",
     "build": "next build",
-    "start": "concurrently -k -n app,play \"next start -p 3002\" \"node play-server/server.mjs\"",
+    "start": "concurrently -k -n app,play \"next start -p ${PORT:-3002}\" \"node play-server/server.mjs\"",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "db:generate": "drizzle-kit generate",
@@ -15,7 +15,8 @@
     "db:seed": "tsx scripts/seed.ts",
     "setup": "npm run db:migrate && npm run db:seed",
     "test:e2e": "playwright test",
-    "postinstall": "node scripts/copy-monaco.mjs"
+    "postinstall": "node scripts/copy-monaco.mjs",
+    "start:prod": "npm run db:migrate && node scripts/seed-if-enabled.mjs && npm start"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.8",

@@ -67,7 +67,7 @@ test("fork → edit → pull request → owner merges", async ({ page, browser }
   await expect(page.locator("text=improved by the e2e test")).toBeVisible();
 
   // The owner merges it.
-  const ctx = await browser.newContext({ baseURL: "http://localhost:3002" });
+  const ctx = await browser.newContext({ baseURL: process.env.BASE_URL || "http://localhost:3002" });
   const owner = await ctx.newPage();
   await login(owner, "arcadia", process.env.SEED_ADMIN_PASSWORD || "arcadia-admin");
   await owner.goto(prUrl);
@@ -92,7 +92,7 @@ test("publish a zip → review queue → admin approves", async ({ page, browser
   await page.waitForURL("**/g/**?published=1");
   await expect(page.locator("text=review queue")).toBeVisible();
 
-  const ctx = await browser.newContext({ baseURL: "http://localhost:3002" });
+  const ctx = await browser.newContext({ baseURL: process.env.BASE_URL || "http://localhost:3002" });
   const admin = await ctx.newPage();
   await login(admin, "arcadia", process.env.SEED_ADMIN_PASSWORD || "arcadia-admin");
   await admin.goto("/admin");

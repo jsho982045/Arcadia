@@ -20,11 +20,17 @@ export function pgliteDir() {
   return path.resolve(process.env.PGLITE_DIR || ".data/pglite");
 }
 
+/** SSL for hosted Postgres over the internet; off for local and Railway's private network. DATABASE_SSL=true|false overrides. */
+function wantsSsl(url: string) {
+  if (process.env.DATABASE_SSL) return process.env.DATABASE_SSL === "true";
+  return !/@(localhost|127\.0\.0\.1|[^/:]+\.railway\.internal)[:/]/.test(url);
+}
+
 function create(): Db {
   if (process.env.DATABASE_URL) {
     const pool = new Pool({
       connectionString: process.env.DATABASE_URL,
-      ssl: process.env.DATABASE_SSL === "false" ? undefined : process.env.DATABASE_URL.includes("localhost") ? undefined : { rejectUnauthorized: false },
+      ssl: wantsSsl(process.env.DATABASE_URL) ? { rejectUnauthorized: false } : undefined,
     });
     g.__arcadiaClose = () => pool.end();
     return drizzlePg(pool, { schema }) as unknown as Db;

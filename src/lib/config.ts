@@ -30,6 +30,8 @@ export const config = {
 };
 
 export const stripeEnabled = () => Boolean(config.stripeSecretKey && config.stripePriceId);
+/** Without Stripe, a "dev mode" button toggles Pro for testing. Off in production unless ALLOW_DEV_BILLING=true. */
+export const devBillingAllowed = () => !stripeEnabled() && (process.env.NODE_ENV !== "production" || process.env.ALLOW_DEV_BILLING === "true");
 
 export const CATEGORIES = [
   { id: "arcade", label: "Arcade" },

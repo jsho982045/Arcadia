@@ -113,26 +113,44 @@ Because sandboxed frames can't use `localStorage`, the SDK installs a drop-in re
 
 ---
 
-## Deploying to production
+## Deploying to production (Railway)
 
-The embedded database (PGlite) is for local development only. In production use real Postgres and put the play server on its own domain.
+One Railway service runs both servers from the `Dockerfile`, with a Railway Postgres database and a volume for game files. `railway.json` holds the build and health-check settings.
 
-1. **Postgres**: create a database on Neon, Supabase or Fly Postgres and set `DATABASE_URL`.
-2. **Two domains**: e.g. `arcadia.gg` for the site and `arcadia-play.net` for games. Set `APP_ORIGIN=https://arcadia.gg` and `NEXT_PUBLIC_PLAY_ORIGIN=https://arcadia-play.net`. The play domain must be a *different registrable domain*, not a subdomain.
-3. **Storage**: the app and play server share `STORAGE_DIR`. On a single server (Fly.io, Render, a VPS), point it at a persistent volume. To scale out later, reimplement the five functions in `src/lib/storage.ts` against Cloudflare R2/S3 and serve `/v/*` from a CDN.
-4. **Stripe**: create a monthly Price, then set `STRIPE_SECRET_KEY`, `STRIPE_PRICE_ID` and `STRIPE_WEBHOOK_SECRET`. Point a webhook at `https://<site>/api/stripe/webhook` for `checkout.session.completed` and `customer.subscription.*`.
-5. Run `npm run db:migrate` on deploy. Seed only if you want the demo games (`SEED_ADMIN_PASSWORD` set to something strong).
+1. **Create the project.** In Railway: *New Project → Deploy from GitHub repo → jsho982045/Arcadia*.
+2. **Add Postgres.** *+ New → Database → PostgreSQL*.
+3. **Add a volume** to the Arcadia service, mounted at **`/data`** (game files live there).
+4. **Create two domains.** In the Arcadia service go to *Settings → Networking*:
+   - **Generate Domain** with target port **8080**: this is the site (e.g. `arcadia-production.up.railway.app`).
+   - **Generate Domain** again with target port **3001**: this is the game server (e.g. `arcadia-play-production.up.railway.app`).
+5. **Set variables** on the Arcadia service (*Variables* tab):
 
-A `Dockerfile` is included that runs both servers in one container. Put the site domain in front of port 3000 and the play domain in front of port 3001, and mount a volume at `/data`.
+   | Variable | Value |
+   | --- | --- |
+   | `DATABASE_URL` | `${{Postgres.DATABASE_URL}}` (reference to the database) |
+   | `PORT` | `8080` |
+   | `APP_ORIGIN` | `https://<site domain>` |
+   | `NEXT_PUBLIC_PLAY_ORIGIN` | `https://<game domain>` |
+   | `SEED_DEMO` | `true` (loads the 6 games + demo users once) |
+   | `SEED_ADMIN_PASSWORD` | a strong password for the `arcadia` admin account |
+   | `STRIPE_SECRET_KEY`, `STRIPE_PRICE_ID`, `STRIPE_WEBHOOK_SECRET` | from Stripe (below) |
 
-```bash
-docker build -t arcadia .
-docker run -p 3000:3000 -p 3001:3001 -v arcadia-data:/data \
-  -e DATABASE_URL=postgres://... \
-  -e APP_ORIGIN=https://arcadia.gg -e NEXT_PUBLIC_PLAY_ORIGIN=https://arcadia-play.net arcadia
-```
+   Railway redeploys automatically. Every push to `main` deploys again. Migrations run on each start.
 
-`NEXT_PUBLIC_PLAY_ORIGIN` is read at build time, so pass it as a build arg as well (`--build-arg NEXT_PUBLIC_PLAY_ORIGIN=...`).
+6. **Stripe** (start in *test mode*):
+   - *Product catalog → Add product* "Arcadia Pro", recurring, $5.99/month → copy the **Price ID** (`price_…`).
+   - *Developers → API keys* → copy the **Secret key** (`sk_test_…`).
+   - *Developers → Webhooks → Add endpoint*: `https://<site domain>/api/stripe/webhook`, events `checkout.session.completed`, `customer.subscription.created`, `customer.subscription.updated`, `customer.subscription.deleted` → copy the **Signing secret** (`whsec_…`).
+   - *Settings → Billing → Customer portal* → **Activate** (for "Manage billing").
+   - Test with card `4242 4242 4242 4242`, any future date, any CVC. When ready, repeat with live keys.
+
+Without Stripe keys the Pro button shows "coming soon" in production (set `ALLOW_DEV_BILLING=true` to enable the no-payment test toggle).
+
+**Domains:** the free `*.up.railway.app` domains are fine for testing. For launch, buy two real domains (about $10/year each), one for the site and one for games, and add them as custom domains with the same target ports.
+
+### Other hosts
+
+The same `Dockerfile` runs anywhere: set the variables above, expose the site port (`$PORT`) and 3001 on two different domains, and mount a persistent volume at `/data`. `NEXT_PUBLIC_PLAY_ORIGIN` is read at build time, so pass it as a build argument too.
 
 ### Launch checklist
 
