@@ -1,0 +1,8 @@
+{
+  "title": "My Arcadia Game",
+  "description": "Catch the falling stars.",
+  "instructions": "Move with the mouse or arrow keys.",
+  "category": "casual",
+  "tags": ["starter"],
+  "orientation": "landscape"
+}

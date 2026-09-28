@@ -1,0 +1,80 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #0c0a17;
+  --color-panel: #151226;
+  --color-panel-2: #1d1934;
+  --color-line: #2a2547;
+  --color-ink: #f4f1ff;
+  --color-muted: #a39cc8;
+  --color-dim: #6f6893;
+  --color-brand: #ff3d8b;
+  --color-brand-2: #7c5cff;
+  --color-ok: #34d399;
+  --color-warn: #fbbf24;
+  --color-bad: #f87171;
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Outfit", "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+html {
+  color-scheme: dark;
+}
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold transition active:scale-[.98] disabled:pointer-events-none disabled:opacity-50 cursor-pointer;
+}
+@utility btn-primary {
+  @apply btn text-white;
+  background: linear-gradient(135deg, var(--color-brand), var(--color-brand-2));
+  box-shadow: 0 6px 24px -8px rgb(255 61 139 / 0.6);
+  &:hover {
+    filter: brightness(1.08);
+  }
+}
+@utility btn-ghost {
+  @apply btn border border-line bg-panel text-ink hover:bg-panel-2;
+}
+@utility btn-ok {
+  @apply btn bg-ok text-[#06281c] hover:brightness-110;
+}
+@utility btn-danger {
+  @apply btn border border-bad/40 bg-bad/10 text-bad hover:bg-bad/20;
+}
+@utility card {
+  @apply rounded-2xl border border-line bg-panel;
+}
+@utility input {
+  @apply w-full rounded-xl border border-line bg-bg px-3 py-2 text-sm text-ink placeholder:text-dim outline-none focus:border-brand-2 focus:ring-2 focus:ring-brand-2/30;
+}
+@utility label {
+  @apply mb-1 block text-sm font-medium text-muted;
+}
+@utility chip {
+  @apply inline-flex items-center gap-1 rounded-full border border-line bg-panel-2 px-2.5 py-0.5 text-xs font-medium text-muted;
+}
+@utility link {
+  @apply text-brand-2 hover:underline;
+}
+@utility h-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+.diff-add {
+  background: rgb(52 211 153 / 0.12);
+}
+.diff-del {
+  background: rgb(248 113 113 / 0.12);
+}
+.diff-hunk {
+  background: rgb(124 92 255 / 0.12);
+  color: var(--color-muted);
+}

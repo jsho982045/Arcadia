@@ -1,0 +1,13 @@
+{
+  "title": "Neon Serpent",
+  "category": "arcade",
+  "tags": [
+    "snake",
+    "classic",
+    "neon"
+  ],
+  "orientation": "portrait",
+  "description": "Classic snake with a neon glow. Eat orbs to grow, grab golden orbs for big points, and don't bite yourself. It speeds up as you grow.",
+  "instructions": "Arrow keys / WASD, or swipe on touch screens.",
+  "thumbnail": "thumb.svg"
+}

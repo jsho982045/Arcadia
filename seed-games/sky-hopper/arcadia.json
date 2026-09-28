@@ -1,0 +1,13 @@
+{
+  "title": "Sky Hopper",
+  "category": "platformer",
+  "tags": [
+    "runner",
+    "jump",
+    "coins"
+  ],
+  "orientation": "landscape",
+  "description": "An endless platformer above the clouds. Jump and double-jump across gaps, collect coins and dodge spikes as the pace picks up.",
+  "instructions": "Tap, Space or \u2191 to jump. Jump again in mid-air to double-jump.",
+  "thumbnail": "thumb.svg"
+}

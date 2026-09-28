@@ -1,0 +1,13 @@
+{
+  "title": "Neon Drift",
+  "category": "racing",
+  "tags": [
+    "racing",
+    "endless",
+    "night"
+  ],
+  "orientation": "portrait",
+  "description": "Race through a neon city at night. Weave between cars, chain near misses for bonus points and grab blue orbs. The faster you go, the harder it gets.",
+  "instructions": "\u2190 \u2192 or A D to steer, or drag on touch screens.",
+  "thumbnail": "thumb.svg"
+}

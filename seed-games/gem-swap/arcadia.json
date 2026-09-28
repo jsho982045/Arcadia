@@ -1,0 +1,13 @@
+{
+  "title": "Gem Swap",
+  "category": "puzzle",
+  "tags": [
+    "match-3",
+    "gems",
+    "timed"
+  ],
+  "orientation": "portrait",
+  "description": "Swap neighbouring gems to make rows of three or more. Chains multiply your points and big matches add time to the clock. 90 seconds per round.",
+  "instructions": "Tap a gem then a neighbour, or drag a gem to swap it.",
+  "thumbnail": "thumb.svg"
+}
