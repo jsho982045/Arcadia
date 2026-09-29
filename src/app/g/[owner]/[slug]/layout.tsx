@@ -42,14 +42,14 @@ export default async function GameLayout({ children, params }: { children: React
   ];
 
   return (
-    <div className="mt-6">
-      <div className="flex flex-wrap items-start justify-between gap-4">
+    <div>
+      <div className="card flex flex-wrap items-start justify-between gap-4 px-4 py-3">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2 text-sm text-muted">
             <UserLink user={owner} /> <span>/</span> <span className="font-mono text-ink">{game.slug}</span>
             {game.status !== "published" && <StatusPill status={game.status} />}
           </div>
-          <h1 className="h-display mt-1 truncate text-3xl font-black sm:text-4xl">{game.title}</h1>
+          <h1 className="retro-title-dark mt-1 truncate text-3xl sm:text-4xl">{game.title}</h1>
           {parent && (
             <p className="mt-1 text-sm text-muted">
               Forked from{" "}
@@ -90,7 +90,7 @@ export default async function GameLayout({ children, params }: { children: React
         </div>
       </div>
       <Tabs tabs={tabs} />
-      <div className="mt-6">{children}</div>
+      <div className="mt-5">{children}</div>
     </div>
   );
 }

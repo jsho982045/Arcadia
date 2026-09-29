@@ -1,0 +1,9 @@
+{
+  "title": "Chain Bloom",
+  "category": "puzzle",
+  "tags": ["chain-reaction", "relaxing", "music", "one-tap"],
+  "orientation": "portrait",
+  "description": "One tap plants a spark in a moonlit pond. Watch crystal lotuses bloom in a musical chain reaction, dodge black thorns, and chase huge multipliers across 40 levels and a daily Zen mode.",
+  "instructions": "Tap anywhere to plant a spark. Bloom enough crystals to earn stars. Space = retry, M = mute.",
+  "thumbnail": "thumb.svg"
+}

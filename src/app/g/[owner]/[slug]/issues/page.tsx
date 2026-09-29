@@ -42,7 +42,7 @@ export default async function IssuesPage({ params, searchParams }: { params: Pro
               <div className="min-w-0 flex-1">
                 <Link href={`${base}/issues/${issue.number}`} className="font-semibold hover:text-brand-2">{issue.title}</Link>
                 <p className="text-xs text-dim">
-                  <span className={`mr-2 rounded px-1.5 py-0.5 font-semibold ${issue.kind === "bug" ? "bg-bad/15 text-bad" : "bg-brand-2/20 text-[#b7a6ff]"}`}>{issue.kind}</span>#{issue.number} opened {timeAgo(issue.createdAt)} by {author.username}
+                  <span className={`mr-2 rounded px-1.5 py-0.5 font-semibold ${issue.kind === "bug" ? "bg-bad/15 text-bad" : "bg-brand-2/15 text-brand-2"}`}>{issue.kind}</span>#{issue.number} opened {timeAgo(issue.createdAt)} by {author.username}
                 </p>
               </div>
               {replies > 0 && <span className="text-sm text-dim">💬 {replies}</span>}

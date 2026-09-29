@@ -27,9 +27,25 @@ async function mkUser(username: string, displayName: string, password: string, e
   return u;
 }
 
+const SEED_GAMES = ["phase-runner", "orbit-survivors", "ghost-lap", "chain-bloom", "brick-blitz", "neon-serpent", "tile-fusion", "sky-hopper", "neon-drift", "gem-swap"];
+
+/** Existing installs: publish any seed games that were added after the first seed. */
+async function topUp(team: typeof users.$inferSelect) {
+  const have = await db.select({ title: games.title }).from(games).where(eq(games.ownerId, team.id));
+  const titles = new Set(have.map((g) => g.title));
+  for (const slug of SEED_GAMES) {
+    const files = readDir(path.join("seed-games", slug));
+    const title = JSON.parse(files["arcadia.json"].toString("utf8")).title;
+    if (titles.has(title)) continue;
+    const g = await createGame({ owner: team, files, isSeed: true, publishNow: true });
+    console.log("Added", g.title);
+  }
+}
+
 async function main() {
   const already = await db.select().from(users).where(eq(users.username, "arcadia"));
   if (already.length) {
+    await topUp(already[0]);
     console.log("Already seeded. Delete .data/ to start fresh.");
     return closeDb();
   }
@@ -38,7 +54,7 @@ async function main() {
   const pat = await mkUser("pixelpat", "Pixel Pat", "password123", { bio: "I fix bugs in other people's games for fun." });
   const maya = await mkUser("mayaplays", "Maya", "password123", { plan: "pro", subscriptionStatus: "trialing", planInterval: "year", bio: "Puzzle games forever." });
 
-  const order = ["brick-blitz", "neon-serpent", "tile-fusion", "sky-hopper", "neon-drift", "gem-swap"];
+  const order = SEED_GAMES;
   const made: Record<string, Awaited<ReturnType<typeof createGame>>> = {};
   for (const slug of order) {
     const files = readDir(path.join("seed-games", slug));

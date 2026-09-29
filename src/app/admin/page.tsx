@@ -22,10 +22,10 @@ export default async function Admin() {
     db.select({ r: reports, reporter: users }).from(reports).innerJoin(users, eq(users.id, reports.reporterId)).where(eq(reports.status, "open")).orderBy(desc(reports.createdAt)),
   ]);
   return (
-    <div className="mt-10 space-y-10">
-      <h1 className="h-display text-3xl font-extrabold">Moderation</h1>
+    <div className="space-y-8">
+      <h1 className="retro-title text-4xl">Moderation</h1>
       <section>
-        <h2 className="h-display mb-3 text-xl font-bold">Review queue ({queue.length})</h2>
+        <h2 className="section-head mb-3">Review queue ({queue.length})</h2>
         {queue.length ? (
           <div className="space-y-4">
             {queue.map(({ game, owner, version }) => (
@@ -59,7 +59,7 @@ export default async function Admin() {
         )}
       </section>
       <section>
-        <h2 className="h-display mb-3 text-xl font-bold">Reports ({open.length})</h2>
+        <h2 className="section-head mb-3">Reports ({open.length})</h2>
         {open.length ? (
           <ul className="card divide-y divide-line">
             {open.map(({ r, reporter }) => (
@@ -80,7 +80,7 @@ export default async function Admin() {
         )}
       </section>
       <section>
-        <h2 className="h-display mb-3 text-xl font-bold">Suspend a user</h2>
+        <h2 className="section-head mb-3">Suspend a user</h2>
         <form action={banUser} className="flex max-w-md gap-2">
           <input name="username" className="input" placeholder="username" required />
           <button className="btn-danger">Suspend</button>

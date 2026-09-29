@@ -118,10 +118,20 @@ export function Player(props: Props) {
   const boot = JSON.stringify({ arcadia: { save: props.initialSave ?? null, signedIn: !!signedIn } });
 
   return (
-    <div data-game-id={gameId}>
+    <div data-game-id={gameId} className="cabinet">
+      <div className="cabinet-bar">
+        <span className="led" style={{ "--c": "#fff" } as React.CSSProperties} />
+        <span className="min-w-0 truncate text-sm font-black uppercase tracking-wide text-white [text-shadow:0_1px_0_rgba(120,45,0,.7)]" style={{ fontFamily: "var(--font-display)" }}>
+          {mode === "preview" ? "Preview" : "Now playing"} <span className="opacity-70">/</span> {props.title}
+        </span>
+        <span className="ml-auto flex shrink-0 items-center gap-1.5">
+          <span className="led" style={{ "--c": started && !capped ? "#3cff8a" : "#ff5a3c" } as React.CSSProperties} />
+          <span className="hidden text-[10px] font-black tracking-widest text-white/90 sm:inline">{started && !capped ? "ON" : "READY"}</span>
+        </span>
+      </div>
       <div
         ref={box}
-        className={`relative w-full overflow-hidden rounded-2xl border border-line bg-black ${props.heightClass ?? (portrait ? "h-[78vh] max-h-[820px]" : "aspect-video max-h-[78vh]")}`}
+        className={`cabinet-screen relative w-full overflow-hidden ${props.heightClass ?? (portrait ? "h-[78vh] max-h-[820px]" : "aspect-video max-h-[78vh]")}`}
       >
         {started && !capped ? (
           <iframe
@@ -137,8 +147,8 @@ export function Player(props: Props) {
             data-testid="game-frame"
           />
         ) : capped ? (
-          <div className="flex h-full flex-col items-center justify-center gap-3 bg-gradient-to-br from-brand/20 to-brand-2/30 p-8 text-center">
-            <p className="h-display text-3xl font-black">You&apos;ve used today&apos;s free play time</p>
+          <div className="flex h-full flex-col items-center justify-center gap-3 bg-gradient-to-br from-[#ffe2b8] to-[#bfdcfa] p-8 text-center">
+            <p className="retro-title-dark text-3xl">You&apos;ve used today&apos;s free play time</p>
             <p className="max-w-md text-muted">Free accounts get 30 minutes of play a day across all games. Go Pro for unlimited play; half of it goes to the people who make these games.</p>
             <div className="mt-2 flex gap-2">
               <Link href="/pro" className="btn-primary px-6 py-3">Go Pro: unlimited play</Link>
@@ -153,29 +163,29 @@ export function Player(props: Props) {
               <img src={props.thumb} alt="" className="absolute inset-0 h-full w-full scale-110 object-cover opacity-40 blur-xl" />
             )}
             <span className="relative flex flex-col items-center gap-4">
-              <span className="flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-brand to-brand-2 text-4xl shadow-[0_0_60px_-10px_#ff3d8b] transition group-hover:scale-110">▶</span>
-              <span className="h-display text-2xl font-black">{mode === "preview" ? "Play preview" : `Play ${props.title}`}</span>
+              <span className="flex h-24 w-24 items-center justify-center rounded-full border-4 border-[#b95400] bg-gradient-to-b from-[#ffbd5c] via-[#ff9a1f] to-[#f07800] text-4xl text-white shadow-[inset_0_2px_0_rgba(255,255,255,.6),0_0_50px_-5px_#ff9a1f] transition group-hover:scale-110">▶</span>
+              <span className="retro-title text-2xl">{mode === "preview" ? "Play preview" : `Play ${props.title}`}</span>
             </span>
           </button>
         )}
-        {toast && <div className="absolute left-1/2 top-3 -translate-x-1/2 rounded-full bg-bg/90 px-4 py-1.5 text-sm font-semibold shadow-lg">{toast}</div>}
+        {toast && <div className="absolute left-1/2 top-3 -translate-x-1/2 rounded-full bg-white/95 px-4 py-1.5 text-sm font-bold text-ink shadow-lg">{toast}</div>}
       </div>
-      <div className="mt-2 flex flex-wrap items-center justify-between gap-2 text-xs text-dim">
+      <div className="cabinet-foot">
         <span>
           {mode === "preview" ? (
             "Preview: play time, scores and saves are not recorded."
           ) : isPro ? (
-            <span className="text-brand">PRO · unlimited play</span>
+            <span className="font-bold text-[#ffb95a]">PRO · unlimited play</span>
           ) : remaining !== null ? (
-            <>Free play left today: <b className="text-muted">{Math.ceil(remaining / 60)} min</b> · <Link href="/pro" className="link">Go unlimited</Link></>
+            <>Free play left today: <b className="text-white">{Math.ceil(remaining / 60)} min</b> · <Link href="/pro" className="font-bold text-[#ffb95a] hover:underline">Go unlimited</Link></>
           ) : null}
-          {error && <span className="ml-2 text-bad">Game error: {error}</span>}
+          {error && <span className="ml-2 text-[#ff8a8a]">Game error: {error}</span>}
         </span>
         <span className="flex gap-2">
           {started && (
-            <button onClick={() => { setStarted(false); setTimeout(() => setStarted(true), 50); }} className="rounded-lg px-2 py-1 hover:bg-panel hover:text-ink">↻ Restart</button>
+            <button onClick={() => { setStarted(false); setTimeout(() => setStarted(true), 50); }} className="btn-mini">↻ Restart</button>
           )}
-          <button onClick={fullscreen} className="rounded-lg px-2 py-1 hover:bg-panel hover:text-ink">⛶ Fullscreen</button>
+          <button onClick={fullscreen} className="btn-mini">⛶ Fullscreen</button>
         </span>
       </div>
     </div>

@@ -32,7 +32,7 @@ export default async function IssuePage({ params }: { params: Promise<{ owner: s
           </h2>
           <p className="mt-2 flex flex-wrap items-center gap-2 text-sm text-muted">
             <StatusPill status={issue.status} />
-            <span className={`rounded px-1.5 py-0.5 text-xs font-semibold ${issue.kind === "bug" ? "bg-bad/15 text-bad" : "bg-brand-2/20 text-[#b7a6ff]"}`}>{issue.kind}</span>
+            <span className={`rounded px-1.5 py-0.5 text-xs font-semibold ${issue.kind === "bug" ? "bg-bad/15 text-bad" : "bg-brand-2/15 text-brand-2"}`}>{issue.kind}</span>
             <UserLink user={author} /> opened this {timeAgo(issue.createdAt)}
           </p>
           {closedBy && (

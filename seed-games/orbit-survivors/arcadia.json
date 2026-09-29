@@ -1,0 +1,9 @@
+{
+  "title": "Orbit Survivors",
+  "category": "action",
+  "tags": ["roguelite", "survival", "orbs", "bullet-heaven", "neon"],
+  "orientation": "portrait",
+  "description": "A neon roguelite survival arena. Your core's orbs fight for you: drag to dodge the swarm, collect gems, level up and combine upgrades into game-breaking evolutions. Survive the bosses.",
+  "instructions": "Drag anywhere (touch or mouse) to move. Orbs orbit and attack automatically. Tap with a second finger, double-tap or press Space to dash once unlocked. WASD/arrows also work. Pick 1 of 3 upgrades on every level up.",
+  "thumbnail": "thumb.svg"
+}

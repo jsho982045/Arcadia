@@ -9,12 +9,13 @@ export const metadata = { title: "Join" };
 export default async function SignupPage({ searchParams }: { searchParams: Promise<{ error?: string; next?: string }> }) {
   const sp = await searchParams;
   return (
-    <div className="mx-auto mt-12 max-w-md">
-      <h1 className="h-display text-3xl font-extrabold">Join Arcadia</h1>
-      <p className="mb-6 mt-1 text-muted">
-        Start your {config.trialDays}-day free trial. Play every game, publish your own and help improve others. Anyone can browse and play the free games without an account.
-      </p>
-      <form action={signup} className="card space-y-4 p-6">
+    <div className="mx-auto mt-4 max-w-md">
+      <form action={signup} className="box">
+        <h1 className="box-title box-title-orange text-lg">Join Arcadia</h1>
+        <div className="space-y-4 bg-gradient-to-b from-white to-[#eaf3fc] p-5">
+        <p className="text-sm text-muted">
+          Start your {config.trialDays}-day free trial. Play every game, publish your own and help improve others. Anyone can browse and play the free games without an account.
+        </p>
         <ErrorNote message={sp.error} />
         <input type="hidden" name="next" value={sp.next ?? "/"} />
         <div className="grid gap-4 sm:grid-cols-2">
@@ -37,28 +38,29 @@ export default async function SignupPage({ searchParams }: { searchParams: Promi
         </div>
         <fieldset className="grid grid-cols-2 gap-3">
           <legend className="label">Plan ({config.trialDays}-day free trial on both)</legend>
-          <label className="card cursor-pointer p-3 text-sm has-[:checked]:border-brand">
-            <input type="radio" name="interval" value="month" defaultChecked className="mr-2 accent-[#7c5cff]" />
+          <label className="card cursor-pointer p-3 text-sm has-[:checked]:border-brand has-[:checked]:bg-[#fff4e5] has-[:checked]:shadow-[0_0_0_2px_rgba(240,120,0,.35)]">
+            <input type="radio" name="interval" value="month" defaultChecked className="mr-2 accent-[#f07800]" />
             <b>${config.proMonthlyCents / 100}</b> / month
           </label>
-          <label className="card cursor-pointer p-3 text-sm has-[:checked]:border-brand">
-            <input type="radio" name="interval" value="year" className="mr-2 accent-[#7c5cff]" />
+          <label className="card cursor-pointer p-3 text-sm has-[:checked]:border-brand has-[:checked]:bg-[#fff4e5] has-[:checked]:shadow-[0_0_0_2px_rgba(240,120,0,.35)]">
+            <input type="radio" name="interval" value="year" className="mr-2 accent-[#f07800]" />
             <b>${config.proYearlyCents / 100}</b> / year
             <span className="block text-xs text-ok">2 months free</span>
           </label>
         </fieldset>
         {!stripeEnabled() && <p className="text-xs text-dim">Payments aren&apos;t connected on this server, so no card is taken.</p>}
         <label className="flex items-start gap-2 text-sm text-muted">
-          <input type="checkbox" name="age" className="mt-1 accent-[#7c5cff]" required /> I am 13 years old or older.
+          <input type="checkbox" name="age" className="mt-1 accent-[#f07800]" required /> I am 13 years old or older.
         </label>
         <label className="flex items-start gap-2 text-sm text-muted">
-          <input type="checkbox" name="terms" className="mt-1 accent-[#7c5cff]" required />
+          <input type="checkbox" name="terms" className="mt-1 accent-[#f07800]" required />
           <span>
             I agree to the <Link href="/terms" className="link">Terms</Link>, <Link href="/privacy" className="link">Privacy Policy</Link> and{" "}
             <Link href="/guidelines" className="link">Community Guidelines</Link>.
           </span>
         </label>
-        <SubmitButton className="btn-primary w-full" pendingText="Creating account…">Continue to start free trial</SubmitButton>
+        <SubmitButton className="btn-primary w-full !py-2.5 text-base" pendingText="Creating account…">Continue to start free trial</SubmitButton>
+        </div>
       </form>
       <p className="mt-4 text-center text-sm text-muted">
         Already have an account? <Link href="/login" className="link">Sign in</Link>

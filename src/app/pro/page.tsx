@@ -14,39 +14,41 @@ export default async function ProPage({ searchParams }: { searchParams: Promise<
   const yearly = config.proYearlyCents / 100;
   const isPro = user?.plan === "pro";
   return (
-    <div className="mx-auto mt-12 max-w-4xl space-y-10">
-      <div className="text-center">
-        <h1 className="h-display text-4xl font-black sm:text-5xl">
-          Play everything. <span className="bg-gradient-to-r from-brand to-brand-2 bg-clip-text text-transparent">Pay the creators.</span>
+    <div className="mx-auto mt-4 max-w-4xl space-y-6">
+      <div className="sunburst rounded-xl border border-[#0f4a94] px-5 py-8 text-center shadow-[inset_0_1px_0_rgba(255,255,255,.6),0_10px_20px_-12px_rgba(0,40,100,.7)]">
+        <h1 className="retro-title text-4xl sm:text-5xl">
+          Play everything. <span className="text-[#ffd34d]">Pay the creators.</span>
         </h1>
-        <p className="mx-auto mt-3 max-w-2xl text-muted">
+        <p className="mx-auto mt-3 max-w-2xl font-medium text-white [text-shadow:0_1px_2px_rgba(0,30,80,.7)]">
           {Math.round(config.creatorPoolShare * 100)}% of every Pro subscription goes straight to the people who make and improve the games you play, split by how long you play each one.
         </p>
       </div>
-      {sp.success && <p className="rounded-xl border border-ok/40 bg-ok/10 px-4 py-3 text-center text-ok">Welcome to Pro! Unlimited play is on.</p>}
-      {sp.cancelled && <p className="rounded-xl border border-line bg-panel px-4 py-3 text-center text-muted">Your plan is back to Free.</p>}
+      {sp.success && <p className="rounded-xl border border-ok/40 bg-ok/10 px-4 py-3 text-center font-semibold text-ok">Welcome to Pro! Unlimited play is on.</p>}
+      {sp.cancelled && <p className="card px-4 py-3 text-center text-muted">Your plan is back to Free.</p>}
       <ErrorNote message={sp.error} />
 
       <div className="grid gap-6 md:grid-cols-2">
-        <div className="card p-7">
-          <p className="h-display text-xl font-bold">Visitor</p>
-          <p className="h-display mt-2 text-4xl font-black">$0</p>
+        <div className="box">
+          <h2 className="box-title text-lg">Visitor</h2>
+          <div className="p-6">
+          <p className="retro-title-dark text-5xl">$0</p>
           <ul className="mt-6 space-y-2 text-sm text-muted">
             <li>✓ Browse every game and profile</li>
             <li>✓ Play the free games, no account needed</li>
             <li>✗ No account: sign-in needs a subscription</li>
           </ul>
+          </div>
         </div>
-        <div className="card relative overflow-hidden border-brand/50 p-7">
-          <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-brand/30 blur-3xl" />
-          <p className="h-display text-xl font-bold text-brand">Pro</p>
-          <p className="h-display mt-2 text-4xl font-black">
+        <div className="box relative !border-brand shadow-[0_0_0_3px_rgba(240,120,0,.35),0_14px_24px_-12px_rgba(120,50,0,.6)]">
+          <h2 className="box-title box-title-orange text-lg">Pro <span className="rounded-md bg-white px-1.5 py-0.5 text-[10px] font-black tracking-wider text-brand [text-shadow:none]">BEST VALUE</span></h2>
+          <div className="p-6">
+          <p className="retro-title-dark text-5xl">
             ${monthly}
-            <span className="text-base font-medium text-muted"> / month</span>
+            <span className="text-base font-bold text-muted [text-shadow:none]"> / month</span>
           </p>
           <p className="mt-1 text-sm text-muted">or ${yearly} / year (2 months free) · {config.trialDays}-day free trial on both</p>
-          <ul className="mt-6 space-y-2 text-sm">
-            <li>✓ Every game on the site, unlimited play</li>
+          <ul className="mt-6 space-y-2 text-sm font-medium text-ink">
+            <li className="text-ink">✓ Every game on the site, unlimited play</li>
             <li>✓ Publish games, fork, open issues and pull requests</li>
             <li>✓ Half of your subscription goes to creators you play</li>
             <li>✓ PRO badge on your profile and comments</li>
@@ -74,6 +76,7 @@ export default async function ProPage({ searchParams }: { searchParams: Promise<
             )}
             {devBillingAllowed() && <p className="mt-2 text-center text-xs text-dim">Stripe isn&apos;t configured, so this toggles Pro for testing.</p>}
             <p className="mt-2 text-center text-xs text-dim">Cancel any time before the trial ends and you won&apos;t be charged.</p>
+          </div>
           </div>
         </div>
       </div>

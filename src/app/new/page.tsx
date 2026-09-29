@@ -11,16 +11,16 @@ export default async function NewGame({ searchParams }: { searchParams: Promise<
   const user = await requireUser("/new");
   const { error } = await searchParams;
   return (
-    <div className="mx-auto mt-10 grid max-w-5xl gap-8 lg:grid-cols-[1fr_320px]">
+    <div className="mx-auto grid max-w-5xl gap-8 lg:grid-cols-[1fr_320px]">
       <form action={publishGame} className="card space-y-5 p-6">
         <div>
-          <h1 className="h-display text-3xl font-extrabold">Publish a game</h1>
+          <h1 className="retro-title-dark text-3xl">Publish a game</h1>
           <p className="mt-1 text-sm text-muted">Any HTML5 game works: plain JavaScript, Phaser, PixiJS, Three.js, or web exports from Godot, Unity and GameMaker.</p>
         </div>
         <ErrorNote message={error} />
         <fieldset className="grid gap-3 sm:grid-cols-2">
           <label className="flex cursor-pointer gap-3 rounded-xl border border-line p-4 has-[:checked]:border-brand-2 has-[:checked]:bg-brand-2/10">
-            <input type="radio" name="source" value="zip" defaultChecked className="mt-1 accent-[#7c5cff]" />
+            <input type="radio" name="source" value="zip" defaultChecked className="mt-1 accent-[#f07800]" />
             <span>
               <b>Upload a .zip</b>
               <br />
@@ -28,7 +28,7 @@ export default async function NewGame({ searchParams }: { searchParams: Promise<
             </span>
           </label>
           <label className="flex cursor-pointer gap-3 rounded-xl border border-line p-4 has-[:checked]:border-brand-2 has-[:checked]:bg-brand-2/10">
-            <input type="radio" name="source" value="template" className="mt-1 accent-[#7c5cff]" />
+            <input type="radio" name="source" value="template" className="mt-1 accent-[#f07800]" />
             <span>
               <b>Start from a template</b>
               <br />

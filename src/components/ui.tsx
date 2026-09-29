@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { CheckReport, Game, User } from "@/lib/db/schema";
 import { config } from "@/lib/config";
 
-const AVATAR_COLORS = ["#ff3d8b", "#7c5cff", "#22d3ee", "#34d399", "#fbbf24", "#fb7185", "#a78bfa", "#f97316"];
+const AVATAR_COLORS = ["#ff8a2a", "#4d9bf0", "#3cc4d6", "#4ccf85", "#ffcf3f", "#f0708a", "#9b8cf0", "#ff6a3d"];
 
 export function Avatar({ name, size = 28 }: { name: string; size?: number }) {
   let h = 0;
@@ -10,8 +10,8 @@ export function Avatar({ name, size = 28 }: { name: string; size?: number }) {
   const bg = AVATAR_COLORS[h % AVATAR_COLORS.length];
   return (
     <span
-      className="inline-flex shrink-0 items-center justify-center rounded-full font-bold text-[#0c0a17]"
-      style={{ width: size, height: size, background: bg, fontSize: size * 0.45 }}
+      className="inline-flex shrink-0 items-center justify-center rounded-full border-2 border-white font-extrabold text-white shadow-[0_1px_3px_rgba(10,40,90,.5)] [text-shadow:0_1px_0_rgba(0,0,0,.35)]"
+      style={{ width: size, height: size, background: `linear-gradient(180deg, rgba(255,255,255,.35), rgba(0,0,0,.08)), ${bg}`, fontSize: size * 0.45 }}
       aria-hidden
     >
       {name.trim()[0]?.toUpperCase() || "?"}
@@ -21,7 +21,7 @@ export function Avatar({ name, size = 28 }: { name: string; size?: number }) {
 
 export function UserLink({ user, avatar = true }: { user: Pick<User, "username" | "displayName">; avatar?: boolean }) {
   return (
-    <Link href={`/u/${user.username}`} className="inline-flex items-center gap-1.5 font-medium text-ink hover:underline">
+    <Link href={`/u/${user.username}`} className="inline-flex items-center gap-1.5 font-semibold text-brand-2 hover:text-brand hover:underline">
       {avatar && <Avatar name={user.displayName} size={20} />}
       {user.username}
     </Link>
@@ -45,11 +45,35 @@ export function playUrl(versionId: string) {
   return `${config.playOrigin}/v/${versionId}/index.html`;
 }
 
-export function Rating({ sum, count }: { sum: number; count: number }) {
-  if (!count) return <span className="text-dim">No ratings</span>;
+const STAR = "M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3 6.1 20.6l1.3-6.6L2.5 9.4l6.6-.8z";
+
+/** Five gold stars, partially filled to `value` (0-5). */
+export function Stars({ value, size = 14 }: { value: number; size?: number }) {
+  const row = (fill: string, stroke: string) => (
+    <span className="flex shrink-0">
+      {[0, 1, 2, 3, 4].map((i) => (
+        <svg key={i} width={size} height={size} viewBox="0 0 24 24" className="shrink-0" aria-hidden>
+          <path d={STAR} fill={fill} stroke={stroke} strokeWidth="1.2" strokeLinejoin="round" />
+        </svg>
+      ))}
+    </span>
+  );
+  const pct = Math.max(0, Math.min(5, value)) * 20;
   return (
-    <span className="inline-flex items-center gap-1">
-      <span className="text-warn">★</span> {(sum / count).toFixed(1)} <span className="text-dim">({count})</span>
+    <span className="relative inline-flex" role="img" aria-label={`${value.toFixed(1)} out of 5 stars`}>
+      {row("#d5e2f1", "#b3c8df")}
+      <span className="absolute inset-y-0 left-0 overflow-hidden" style={{ width: `${pct}%` }}>
+        {row("#ffb400", "#d98500")}
+      </span>
+    </span>
+  );
+}
+
+export function Rating({ sum, count }: { sum: number; count: number }) {
+  if (!count) return <span className="inline-flex items-center gap-1.5 text-dim"><Stars value={0} /> No ratings yet</span>;
+  return (
+    <span className="inline-flex items-center gap-1.5 font-semibold text-ink">
+      <Stars value={sum / count} /> {(sum / count).toFixed(1)} <span className="font-normal text-dim">({count})</span>
     </span>
   );
 }
@@ -57,7 +81,7 @@ export function Rating({ sum, count }: { sum: number; count: number }) {
 export function StatusPill({ status }: { status: string }) {
   const map: Record<string, string> = {
     open: "bg-ok/15 text-ok border-ok/30",
-    merged: "bg-brand-2/20 text-[#b7a6ff] border-brand-2/40",
+    merged: "bg-brand-2/15 text-brand-2 border-brand-2/40",
     closed: "bg-bad/10 text-bad border-bad/30",
     published: "bg-ok/15 text-ok border-ok/30",
     review: "bg-warn/15 text-warn border-warn/30",
@@ -66,7 +90,7 @@ export function StatusPill({ status }: { status: string }) {
     archived: "bg-panel-2 text-dim border-line",
   };
   const label: Record<string, string> = { review: "In review", fork: "Fork" };
-  return <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold capitalize ${map[status] ?? "border-line"}`}>{label[status] ?? status}</span>;
+  return <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-extrabold capitalize ${map[status] ?? "border-line"}`}>{label[status] ?? status}</span>;
 }
 
 export function Checks({ report }: { report: CheckReport }) {
@@ -89,7 +113,7 @@ export function Checks({ report }: { report: CheckReport }) {
 export function Empty({ title, children }: { title: string; children?: React.ReactNode }) {
   return (
     <div className="card flex flex-col items-center gap-2 px-6 py-12 text-center">
-      <p className="h-display text-lg font-bold">{title}</p>
+      <p className="retro-title-dark text-xl">{title}</p>
       {children && <div className="max-w-md text-sm text-muted">{children}</div>}
     </div>
   );

@@ -1,0 +1,9 @@
+{
+  "title": "Ghost Lap",
+  "category": "racing",
+  "tags": ["racing", "one-touch", "neon", "survival", "endless"],
+  "orientation": "portrait",
+  "description": "Race a neon circuit that never repeats. Every lap you finish becomes a ghost that keeps driving your exact line forever. Touch one and you crash, so find new gaps, graze ghosts for combo points and survive one more lap.",
+  "instructions": "Your car accelerates by itself. Hold the left or right half of the screen (or Left/Right arrows, A/D) to steer. Stay on the track (3 wall hits ends the run), never touch a ghost, and skim past them for near-miss combos. M toggles sound.",
+  "thumbnail": "thumb.svg"
+}

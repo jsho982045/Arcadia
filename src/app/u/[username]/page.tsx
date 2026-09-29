@@ -29,12 +29,12 @@ export default async function Profile({ params }: { params: Promise<{ username: 
   const merged = prs.filter((p) => p.pr.status === "merged").length;
 
   return (
-    <div className="mt-10 space-y-10">
-      <div className="flex flex-wrap items-center gap-5">
+    <div className="space-y-8">
+      <div className="box flex flex-wrap items-center gap-5 bg-gradient-to-b from-white to-[#e3eefa] p-5">
         <Avatar name={user.displayName} size={80} />
         <div>
-          <h1 className="h-display text-3xl font-extrabold">
-            {user.displayName} {user.plan === "pro" && <span className="chip align-middle border-brand/40 text-brand">PRO</span>}
+          <h1 className="retro-title-dark text-3xl">
+            {user.displayName} {user.plan === "pro" && <span className="pro-badge align-middle">PRO</span>}
           </h1>
           <p className="text-muted">@{user.username} · joined {timeAgo(user.createdAt)}</p>
           {user.bio && <p className="mt-2 max-w-xl text-sm">{user.bio}</p>}
@@ -45,9 +45,9 @@ export default async function Profile({ params }: { params: Promise<{ username: 
       </div>
 
       <section>
-        <h2 className="h-display mb-4 text-xl font-bold">Games</h2>
+        <h2 className="section-head mb-4">Games</h2>
         {mine.length ? (
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+          <div className="grid grid-cols-2 gap-2.5 min-[480px]:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
             {mine.map((g) => (
               <GameCard key={g.id} game={g} owner={user} badge={g.status !== "published" ? g.status : undefined} />
             ))}
@@ -58,7 +58,7 @@ export default async function Profile({ params }: { params: Promise<{ username: 
       </section>
 
       <section>
-        <h2 className="h-display mb-4 text-xl font-bold">Contributions</h2>
+        <h2 className="section-head mb-4">Contributions</h2>
         {prs.length ? (
           <ul className="card divide-y divide-line">
             {prs.map(({ pr, game, owner }) => (
@@ -78,7 +78,7 @@ export default async function Profile({ params }: { params: Promise<{ username: 
 
       {forks.length > 0 && (
         <section>
-          <h2 className="h-display mb-4 text-xl font-bold">Forks</h2>
+          <h2 className="section-head mb-4">Forks</h2>
           <ul className="flex flex-wrap gap-2">
             {forks.map((f) => (
               <li key={f.id}>

@@ -16,11 +16,11 @@ export default async function NewIssue({ params, searchParams }: { params: Promi
       <input type="hidden" name="gameId" value={game.id} />
       <fieldset className="flex gap-3">
         <label className="flex flex-1 cursor-pointer items-center gap-2 rounded-xl border border-line p-3 has-[:checked]:border-bad">
-          <input type="radio" name="kind" value="bug" defaultChecked className="accent-[#f87171]" />
+          <input type="radio" name="kind" value="bug" defaultChecked className="accent-[#d23a3a]" />
           <span><b>Bug</b><br /><span className="text-sm text-muted">Something is broken</span></span>
         </label>
         <label className="flex flex-1 cursor-pointer items-center gap-2 rounded-xl border border-line p-3 has-[:checked]:border-brand-2">
-          <input type="radio" name="kind" value="idea" className="accent-[#7c5cff]" />
+          <input type="radio" name="kind" value="idea" className="accent-[#f07800]" />
           <span><b>Idea</b><br /><span className="text-sm text-muted">A feature or improvement</span></span>
         </label>
       </fieldset>

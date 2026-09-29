@@ -1,0 +1,15 @@
+{
+  "title": "Phase Runner",
+  "category": "action",
+  "tags": [
+    "runner",
+    "neon",
+    "endless",
+    "reflex"
+  ],
+  "orientation": "portrait",
+  "description": "Race down a neon city street that exists in two realities. Swap between DAY and NIGHT to slip through obstacles that only exist in one world, dodge lanes, and chain phase-swap coin streaks as the speed climbs.",
+  "instructions": "Tap anywhere (or Space / Up) to phase-swap between day and night. Swipe left/right (or Left/Right, A/D) to change lane. Solid objects are in your world; dashed ghosts are in the other. Coins collected right after a swap are worth more. M mutes.",
+  "thumbnail": "thumb.svg",
+  "freeToPlay": true
+}

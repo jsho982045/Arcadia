@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <defs>
+    <linearGradient id="day" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff5f6d"/><stop offset="0.6" stop-color="#ff9966"/><stop offset="1" stop-color="#ffe29a"/></linearGradient>
+    <linearGradient id="night" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#04021a"/><stop offset="0.6" stop-color="#180b4d"/><stop offset="1" stop-color="#3b23a8"/></linearGradient>
+    <linearGradient id="sun" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff7c4"/><stop offset="0.5" stop-color="#ffb84d"/><stop offset="1" stop-color="#ff4f6d"/></linearGradient>
+    <radialGradient id="moon" cx="0.35" cy="0.35" r="0.7"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#a7dcff"/></radialGradient>
+    <linearGradient id="road" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a2070"/><stop offset="1" stop-color="#0d0a2e"/></linearGradient>
+    <linearGradient id="wing" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f8ff"/><stop offset="1" stop-color="#6a70b0"/></linearGradient>
+    <linearGradient id="txt1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff8d8"/><stop offset="1" stop-color="#ff8a4a"/></linearGradient>
+    <linearGradient id="txt2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e8ffff"/><stop offset="1" stop-color="#8a5cff"/></linearGradient>
+    <radialGradient id="glowc"><stop offset="0" stop-color="#29f0ff" stop-opacity="0.9"/><stop offset="1" stop-color="#29f0ff" stop-opacity="0"/></radialGradient>
+    <radialGradient id="glowo"><stop offset="0" stop-color="#ffb020" stop-opacity="0.9"/><stop offset="1" stop-color="#ffb020" stop-opacity="0"/></radialGradient>
+    <clipPath id="L"><polygon points="0,0 235,0 165,400 0,400"/></clipPath>
+    <clipPath id="R"><polygon points="235,0 400,0 400,400 165,400"/></clipPath>
+    <clipPath id="sunclip"><rect x="0" y="0" width="400" height="215"/></clipPath>
+  </defs>
+  <rect width="400" height="400" fill="#050814"/>
+  <g clip-path="url(#L)">
+    <rect width="400" height="400" fill="url(#day)"/>
+    <g clip-path="url(#sunclip)">
+      <circle cx="120" cy="170" r="80" fill="url(#sun)"/>
+      <rect x="30" y="176" width="200" height="4" fill="#ff9966"/><rect x="30" y="188" width="200" height="6" fill="#ff9966"/><rect x="30" y="201" width="200" height="8" fill="#ffb27a"/>
+    </g>
+    <path d="M0 215 V170 h24 v-30 h26 v40 h20 v-60 h30 v70 h26 v-24 h30 v50 h40 V215z" fill="#a03a6a"/>
+  </g>
+  <g clip-path="url(#R)">
+    <rect width="400" height="400" fill="url(#night)"/>
+    <g fill="#fff"><circle cx="270" cy="30" r="1.5"/><circle cx="330" cy="60" r="1.2"/><circle cx="370" cy="24" r="1.6"/><circle cx="300" cy="90" r="1"/><circle cx="350" cy="120" r="1.3"/></g>
+    <circle cx="300" cy="150" r="70" fill="url(#glowc)"/>
+    <circle cx="300" cy="150" r="46" fill="url(#moon)"/>
+    <circle cx="288" cy="140" r="9" fill="#5a78be" opacity="0.3"/><circle cx="314" cy="162" r="12" fill="#5a78be" opacity="0.3"/>
+    <path d="M235 215 V160 h20 v-36 h30 v50 h24 v-70 h30 v60 h26 v-30 h35 V215z" fill="#0f0a3a"/>
+    <path d="M255 124 h30 M309 104 h30" stroke="#29f0ff" stroke-width="2"/>
+    <g fill="#29f0ff" opacity="0.9"><rect x="262" y="134" width="4" height="5"/><rect x="272" y="150" width="4" height="5"/><rect x="318" y="118" width="4" height="5"/><rect x="330" y="138" width="4" height="5"/><rect x="354" y="140" width="4" height="5"/></g>
+    <g fill="#ff50c8"><rect x="266" y="164" width="4" height="5"/><rect x="322" y="150" width="4" height="5"/><rect x="346" y="168" width="4" height="5"/></g>
+  </g>
+  <!-- ground -->
+  <rect y="215" width="400" height="185" fill="#120a30"/>
+  <polygon points="188,215 212,215 380,400 20,400" fill="url(#road)"/>
+  <g stroke="#7a4dff" stroke-width="1.5" opacity="0.6" fill="none">
+    <path d="M0 236 H400 M0 262 H400 M0 298 H400 M0 350 H400"/>
+    <path d="M200 215 L-60 400 M200 215 L-140 400 M200 215 L460 400 M200 215 L540 400"/>
+  </g>
+  <path d="M188 215 L20 400" stroke="#ffb020" stroke-width="4"/><path d="M212 215 L380 400" stroke="#29f0ff" stroke-width="4"/>
+  <path d="M200 215 L200 400" stroke="#fff" stroke-width="2.5" stroke-dasharray="10 14" opacity="0.6"/>
+  <!-- obstacles -->
+  <ellipse cx="150" cy="322" rx="46" ry="34" fill="url(#glowo)"/>
+  <rect x="122" y="292" width="56" height="52" fill="#ffb020" stroke="#fff2b8" stroke-width="3"/>
+  <polygon points="122,292 178,292 172,280 128,280" fill="#ffe27a"/>
+  <path d="M122 318 l14 -14 h10 l-14 14z M150 318 l14 -14 h10 l-14 14z" fill="#3c0f14" opacity="0.7"/>
+  <ellipse cx="254" cy="276" rx="34" ry="46" fill="url(#glowc)"/>
+  <polygon points="236,300 244,272 254,254 264,272 272,300" fill="#7a4dff" stroke="#29f0ff" stroke-width="3"/>
+  <path d="M254 254 V300" stroke="#7ffcff" stroke-width="2"/>
+  <!-- coins -->
+  <g fill="#ffd23a" stroke="#a86a00" stroke-width="2"><ellipse cx="208" cy="248" rx="7" ry="9"/><ellipse cx="205" cy="270" rx="9" ry="11"/></g>
+  <!-- ship -->
+  <ellipse cx="200" cy="384" rx="46" ry="8" fill="#000" opacity="0.5"/>
+  <circle cx="200" cy="376" r="46" fill="url(#glowc)"/>
+  <path d="M188 374 L184 392 L192 374z M212 374 L216 392 L208 374z" fill="#29f0ff"/>
+  <polygon points="150,376 182,332 200,314 218,332 250,376 226,380 200,370 174,380" fill="#23204a"/>
+  <polygon points="155,373 184,335 200,318 216,335 245,373 224,377 200,368 176,377" fill="url(#wing)"/>
+  <polygon points="155,373 168,357 182,371 176,377" fill="#ffb020"/><polygon points="245,373 232,357 218,371 224,377" fill="#29f0ff"/>
+  <polygon points="193,354 200,330 207,354 200,362" fill="#a855ff"/>
+  <ellipse cx="200" cy="346" rx="8" ry="13" fill="#12102e"/><ellipse cx="200" cy="343" rx="5" ry="9" fill="#bff8ff"/>
+  <!-- phase split -->
+  <path d="M235 0 L165 400" stroke="#fff" stroke-width="2" opacity="0.7"/>
+  <!-- title -->
+  <g font-family="Arial Black, Impact, system-ui, sans-serif" font-weight="900" font-style="italic" text-anchor="middle">
+    <text x="196" y="66" font-size="58" fill="#ff2878" opacity="0.8">PHASE</text>
+    <text x="204" y="66" font-size="58" fill="#14dcff" opacity="0.8">PHASE</text>
+    <text x="200" y="66" font-size="58" fill="url(#txt1)">PHASE</text>
+    <text x="196" y="118" font-size="50" fill="#ff2878" opacity="0.8">RUNNER</text>
+    <text x="204" y="118" font-size="50" fill="#14dcff" opacity="0.8">RUNNER</text>
+    <text x="200" y="118" font-size="50" fill="url(#txt2)">RUNNER</text>
+  </g>
+</svg>

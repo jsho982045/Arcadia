@@ -1,7 +1,7 @@
 export function DocPage({ title, draft, children }: { title: string; draft?: boolean; children: React.ReactNode }) {
   return (
-    <article className="mx-auto mt-12 max-w-3xl">
-      <h1 className="h-display text-4xl font-black">{title}</h1>
+    <article className="card mx-auto max-w-3xl p-6 sm:p-9">
+      <h1 className="retro-title-dark text-4xl">{title}</h1>
       {draft && (
         <p className="mt-4 rounded-xl border border-warn/40 bg-warn/10 px-4 py-3 text-sm text-warn">
           Draft template. Have a lawyer review and complete this before launching publicly.

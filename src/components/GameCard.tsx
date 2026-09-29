@@ -1,33 +1,34 @@
 import Link from "next/link";
 import type { Game, User } from "@/lib/db/schema";
-import { thumbUrl } from "./ui";
+import { Stars, thumbUrl } from "./ui";
 
 export function GameCard({ game, owner, badge }: { game: Game; owner: Pick<User, "username">; badge?: string }) {
   const thumb = thumbUrl(game);
+  const avg = game.ratingCount ? game.ratingSum / game.ratingCount : 0;
   return (
-    <Link href={`/g/${owner.username}/${game.slug}`} className="group block" data-testid="game-card">
-      <div className="relative aspect-square overflow-hidden rounded-2xl border border-line bg-panel-2 transition group-hover:-translate-y-1 group-hover:border-brand-2/60 group-hover:shadow-[0_18px_40px_-18px_rgba(124,92,255,.7)]">
+    <Link href={`/g/${owner.username}/${game.slug}`} className="tile group" data-testid="game-card">
+      <div className="tile-thumb">
         {thumb ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={thumb} alt="" className="h-full w-full object-cover" loading="lazy" />
+          <img src={thumb} alt="" className="h-full w-full object-cover transition duration-200 group-hover:scale-105" loading="lazy" />
         ) : (
-          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-brand/40 to-brand-2/40">
-            <span className="h-display px-4 text-center text-2xl font-black">{game.title}</span>
+          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-brand-2/40 to-brand/40">
+            <span className="retro-title px-3 text-center text-xl">{game.title}</span>
           </div>
         )}
-        {badge && <span className="absolute left-2 top-2 rounded-full bg-bg/80 px-2 py-0.5 text-xs font-semibold text-ink backdrop-blur">{badge}</span>}
-        <span className="absolute inset-x-0 bottom-0 flex translate-y-full items-center justify-center bg-gradient-to-t from-bg/95 to-transparent pb-3 pt-8 text-sm font-bold opacity-0 transition group-hover:translate-y-0 group-hover:opacity-100">
-          ▶ Play
+        {badge && <span className="tile-ribbon">{badge}</span>}
+        <span className="tile-play">
+          <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden><path d="M1 0l9 5-9 5z" fill="#fff" /></svg>
+          PLAY
         </span>
       </div>
-      <div className="mt-2 px-0.5">
-        <p className="truncate font-semibold">{game.title}</p>
-        <p className="flex items-center justify-between text-xs text-dim">
-          <span className="truncate">by {owner.username}</span>
-          <span>
-            {game.ratingCount ? `★ ${(game.ratingSum / game.ratingCount).toFixed(1)}` : ""} {game.playCount ? `· ${compact(game.playCount)} plays` : ""}
-          </span>
-        </p>
+      <div className="px-0.5 pb-0.5 pt-1.5">
+        <p className="truncate text-[13px] font-extrabold leading-tight text-navy group-hover:text-brand" style={{ fontFamily: "var(--font-display)" }}>{game.title}</p>
+        <div className="mt-1 flex items-center justify-between gap-1">
+          <Stars value={avg} size={12} />
+          <span className="text-[11px] font-semibold text-dim">{compact(game.playCount)} plays</span>
+        </div>
+        <p className="mt-0.5 truncate text-[11px] text-dim">by {owner.username}</p>
       </div>
     </Link>
   );

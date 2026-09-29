@@ -53,8 +53,8 @@ export default async function GamePage({ params, searchParams }: { params: Promi
   const lic = LICENSES[game.license];
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
-      <div className="min-w-0 space-y-8">
+    <div className="grid gap-6 lg:grid-cols-[1fr_310px]">
+      <div className="min-w-0 space-y-6">
         {sp.published && (
           <div className="rounded-xl border border-ok/40 bg-ok/10 px-4 py-3 text-sm text-ok">
             {game.status === "review" ? "Uploaded! Your game is in the review queue. You can play it here while you wait; it will appear on the site once approved." : "Your game is live!"}
@@ -67,14 +67,14 @@ export default async function GamePage({ params, searchParams }: { params: Promi
         )}
 
         {version && live && !isPro && !game.freeToPlay && game.ownerId !== viewer?.id ? (
-          <div className="card flex flex-col items-center gap-3 p-10 text-center">
-            <p className="h-display text-2xl font-bold">This game is for subscribers</p>
+          <div className="box"><h2 className="box-title box-title-orange">Locked</h2><div className="flex flex-col items-center gap-3 bg-gradient-to-b from-white to-[#eaf3fc] p-10 text-center">
+            <p className="retro-title-dark text-2xl">This game is for subscribers</p>
             <p className="max-w-md text-muted">
               Start a {config.trialDays}-day free trial to play every game, from ${config.proMonthlyCents / 100}/month. Half of it goes to the creators you play.
             </p>
             <Link href={viewer ? "/pro" : `/signup?next=${encodeURIComponent(`/g/${owner.username}/${game.slug}`)}`} className="btn-primary">Start free trial</Link>
             <p className="text-xs text-dim">Or try one of the free games on the home page.</p>
-          </div>
+          </div></div>
         ) : version ? (
           <Player
             gameId={game.id}
@@ -93,17 +93,19 @@ export default async function GamePage({ params, searchParams }: { params: Promi
           <p className="text-muted">This game has no playable version yet.</p>
         )}
 
-        <section className="card p-6">
+        <section className="box">
+          <h2 className="box-title">About this game</h2>
+          <div className="p-5">
           <div className="flex flex-wrap items-center gap-3 text-sm text-muted">
             <Rating sum={game.ratingSum} count={game.ratingCount} />
             <span>· {game.playCount.toLocaleString()} plays</span>
-            <span>· {CATEGORIES.find((c) => c.id === game.category)?.label ?? game.category}</span>
+            <span className="chip">{CATEGORIES.find((c) => c.id === game.category)?.label ?? game.category}</span>
             {version && <span>· v{version.number}, updated {timeAgo(version.createdAt)}</span>}
             {game.status !== "published" && <StatusPill status={game.status} />}
           </div>
           {game.description && <p className="mt-4 whitespace-pre-wrap text-[15px] leading-relaxed">{game.description}</p>}
           {game.instructions && (
-            <p className="mt-4 rounded-xl bg-panel-2 px-4 py-3 text-sm">
+            <p className="bevel-inset mt-4 rounded-xl px-4 py-3 text-sm">
               <b>How to play:</b> {game.instructions}
             </p>
           )}
@@ -132,10 +134,11 @@ export default async function GamePage({ params, searchParams }: { params: Promi
               <Link href={`${base}/issues/new`} className="btn-ghost">Report a bug / suggest an idea</Link>
             </div>
           )}
+          </div>
         </section>
 
         <section>
-          <h2 className="h-display mb-3 text-xl font-bold">Comments</h2>
+          <h2 className="section-head mb-3">Comments</h2>
           {viewer ? (
             <form action={addComment} className="card mb-4 space-y-3 p-4">
               <input type="hidden" name="targetType" value="game" />
@@ -147,7 +150,7 @@ export default async function GamePage({ params, searchParams }: { params: Promi
               </div>
             </form>
           ) : (
-            <p className="mb-4 text-sm text-muted">
+            <p className="card mb-4 px-4 py-3 text-sm text-muted">
               <Link href={`/login?next=${encodeURIComponent(base)}`} className="link">Sign in</Link> to comment.
             </p>
           )}
@@ -163,14 +166,15 @@ export default async function GamePage({ params, searchParams }: { params: Promi
                 </div>
               </li>
             ))}
-            {!gameComments.length && <li className="text-sm text-dim">No comments yet.</li>}
+            {!gameComments.length && <li className="card px-4 py-3 text-sm text-dim">No comments yet.</li>}
           </ul>
         </section>
       </div>
 
       <aside className="space-y-6">
-        <section className="card p-5">
-          <h3 className="h-display mb-3 font-bold">Leaderboard</h3>
+        <section className="box">
+          <h3 className="box-title box-title-orange">Leaderboard</h3>
+          <div className="p-4">
           {board.length ? (
             <ol className="space-y-2 text-sm">
               {board.map((r, i) => (
@@ -184,10 +188,12 @@ export default async function GamePage({ params, searchParams }: { params: Promi
           ) : (
             <p className="text-sm text-dim">No scores yet. Be the first!</p>
           )}
+          </div>
         </section>
 
-        <section className="card p-5">
-          <h3 className="h-display mb-3 font-bold">Made by</h3>
+        <section className="box">
+          <h3 className="box-title">Made by</h3>
+          <div className="p-4">
           <div className="flex items-center gap-3">
             <Avatar name={owner.displayName} size={40} />
             <div>
@@ -209,10 +215,12 @@ export default async function GamePage({ params, searchParams }: { params: Promi
               <p className="mt-3 text-xs text-dim">Contributors share {game.contributorShare}% of this game&apos;s earnings, split by points.</p>
             </>
           )}
+          </div>
         </section>
 
-        <section className="card p-5 text-sm">
-          <h3 className="h-display mb-2 font-bold">Open source on {config.appName}</h3>
+        <section className="box text-sm">
+          <h3 className="box-title">Open source on {config.appName}</h3>
+          <div className="p-4">
           <p className="text-muted">
             <b className="text-ink">{lic?.label}</b>. {lic?.summary}
           </p>
@@ -220,11 +228,12 @@ export default async function GamePage({ params, searchParams }: { params: Promi
             <Link href={`${base}/code`} className="btn-ghost">View code</Link>
             <Link href={`${base}/pulls`} className="btn-ghost">Pull requests</Link>
           </div>
+          </div>
         </section>
 
         {viewer && viewer.id !== game.ownerId && (
-          <details className="text-sm text-dim">
-            <summary className="cursor-pointer hover:text-muted">Report this game</summary>
+          <details className="card p-3 text-sm text-dim">
+            <summary className="cursor-pointer font-semibold hover:text-muted">Report this game</summary>
             <form action={report} className="mt-2 space-y-2">
               <input type="hidden" name="targetType" value="game" />
               <input type="hidden" name="targetId" value={game.id} />

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { listGames } from "@/lib/queries";
 import { GameCard } from "@/components/GameCard";
 import { CATEGORIES } from "@/lib/config";
+import { CategoryNav } from "@/components/CategoryNav";
 import { Empty } from "@/components/ui";
 
 export const metadata = { title: "Browse games" };
@@ -17,42 +18,44 @@ export default async function Browse({ searchParams }: { searchParams: Promise<{
     for (const [k, v] of Object.entries(merged)) if (v) p.set(k, v);
     return `/browse?${p}`;
   };
+  const heading = sp.q ? `Results for “${sp.q}”` : category ? CATEGORIES.find((c) => c.id === category)?.label + " Games" : "All Games";
   return (
-    <div className="mt-8 space-y-6">
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <h1 className="h-display text-3xl font-extrabold">{sp.q ? `Results for “${sp.q}”` : category ? CATEGORIES.find((c) => c.id === category)?.label + " games" : "All games"}</h1>
-          <p className="text-sm text-muted">{rows.length} game{rows.length === 1 ? "" : "s"}</p>
-        </div>
-        <form action="/browse" className="flex w-full gap-2 sm:w-auto">
-          {category && <input type="hidden" name="category" value={category} />}
-          <input name="q" defaultValue={sp.q} placeholder="Search…" className="input sm:w-64" />
-          <button className="btn-ghost">Search</button>
-        </form>
+    <div className="grid gap-5 lg:grid-cols-[210px_minmax(0,1fr)]">
+      <CategoryNav active={category} sort={sort} />
+      <div className="min-w-0 space-y-4">
+        <section className="box">
+          <h1 className="box-title text-lg">
+            <span>{heading}</span>
+            <span className="text-xs font-bold text-white/80">{rows.length} game{rows.length === 1 ? "" : "s"}</span>
+          </h1>
+          <div className="flex flex-wrap items-center justify-between gap-3 bg-gradient-to-b from-[#f4f9ff] to-[#e3eefa] p-3">
+            <div className="flex items-center gap-1.5">
+              <span className="mr-1 text-xs font-extrabold uppercase tracking-wide text-dim">Sort</span>
+              {(["popular", "top", "new"] as const).map((s) => (
+                <Link key={s} href={qs({ sort: s })} className={`rounded-full px-3 py-1 text-sm font-bold capitalize transition ${sort === s ? "text-white shadow-[inset_0_1px_0_rgba(255,255,255,.5)]" : "text-brand-2 hover:bg-white"}`} style={sort === s ? { background: "linear-gradient(180deg,#ffb95a,#f07800)", border: "1px solid #b95400" } : { border: "1px solid transparent" }}>
+                  {s === "top" ? "Top rated" : s}
+                </Link>
+              ))}
+            </div>
+            <form action="/browse" className="flex w-full gap-2 sm:w-auto">
+              {category && <input type="hidden" name="category" value={category} />}
+              <input name="q" defaultValue={sp.q} placeholder="Search…" aria-label="Search games" className="input sm:w-64" />
+              <button className="btn-primary">Search</button>
+            </form>
+          </div>
+        </section>
+        {rows.length ? (
+          <div className="box">
+            <div className="grid grid-cols-2 gap-2.5 bg-gradient-to-b from-[#f4f9ff] to-[#e3eefa] p-3 min-[480px]:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
+              {rows.map(({ game, owner }) => (
+                <GameCard key={game.id} game={game} owner={owner} />
+              ))}
+            </div>
+          </div>
+        ) : (
+          <Empty title="No games found">Try another search, or <Link href="/new" className="link">publish the first one</Link>.</Empty>
+        )}
       </div>
-      <div className="flex flex-wrap items-center gap-2">
-        <Link href={qs({ category: undefined })} className={`chip px-3 py-1 text-sm ${!category ? "border-brand-2 text-ink" : ""}`}>All</Link>
-        {CATEGORIES.map((c) => (
-          <Link key={c.id} href={qs({ category: c.id })} className={`chip px-3 py-1 text-sm ${category === c.id ? "border-brand-2 text-ink" : ""}`}>
-            {c.label}
-          </Link>
-        ))}
-        <span className="mx-2 hidden h-5 w-px bg-line sm:block" />
-        {(["popular", "top", "new"] as const).map((s) => (
-          <Link key={s} href={qs({ sort: s })} className={`rounded-lg px-3 py-1 text-sm capitalize ${sort === s ? "bg-panel-2 text-ink" : "text-muted hover:text-ink"}`}>
-            {s === "top" ? "Top rated" : s}
-          </Link>
-        ))}
-      </div>
-      {rows.length ? (
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-          {rows.map(({ game, owner }) => (
-            <GameCard key={game.id} game={game} owner={owner} />
-          ))}
-        </div>
-      ) : (
-        <Empty title="No games found">Try another search, or <Link href="/new" className="link">publish the first one</Link>.</Empty>
-      )}
     </div>
   );
 }

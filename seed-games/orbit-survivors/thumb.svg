@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="46%" r="75%">
+      <stop offset="0" stop-color="#1b1450"/><stop offset="0.55" stop-color="#0a0d2c"/><stop offset="1" stop-color="#03040d"/>
+    </radialGradient>
+    <radialGradient id="neb1" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#ff3d9a" stop-opacity="0.35"/><stop offset="1" stop-color="#ff3d9a" stop-opacity="0"/></radialGradient>
+    <radialGradient id="neb2" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#3d8bff" stop-opacity="0.35"/><stop offset="1" stop-color="#3d8bff" stop-opacity="0"/></radialGradient>
+    <radialGradient id="core" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#ffffff"/><stop offset="0.35" stop-color="#9ff7ff"/><stop offset="1" stop-color="#3df2ff" stop-opacity="0"/></radialGradient>
+    <linearGradient id="t1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#5fc4ff"/></linearGradient>
+    <linearGradient id="t2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff9fd0"/><stop offset="1" stop-color="#ff3d9a"/></linearGradient>
+    <filter id="g4" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4"/></filter>
+    <filter id="g2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2"/></filter>
+    <filter id="g8" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="8"/></filter>
+  </defs>
+  <rect width="400" height="400" fill="url(#bg)"/>
+  <circle cx="90" cy="90" r="130" fill="url(#neb1)"/>
+  <circle cx="330" cy="250" r="150" fill="url(#neb2)"/>
+  <g fill="#ffffff">
+    <circle cx="30" cy="40" r="1.2" opacity=".8"/><circle cx="110" cy="24" r="1" opacity=".6"/><circle cx="210" cy="50" r="1.4" opacity=".9"/><circle cx="300" cy="28" r="1" opacity=".7"/><circle cx="372" cy="70" r="1.3" opacity=".8"/>
+    <circle cx="20" cy="150" r="1" opacity=".6"/><circle cx="375" cy="170" r="1.2" opacity=".7"/><circle cx="45" cy="260" r="1.3" opacity=".8"/><circle cx="360" cy="300" r="1" opacity=".6"/><circle cx="70" cy="330" r="1" opacity=".7"/>
+    <circle cx="150" cy="300" r="1.2" opacity=".6"/><circle cx="260" cy="320" r="1" opacity=".7"/><circle cx="330" cy="120" r="1" opacity=".5"/><circle cx="170" cy="120" r="1.1" opacity=".5"/>
+  </g>
+  <g fill="none" stroke="#5a7bff" stroke-opacity=".12">
+    <path d="M0 100H400M0 200H400M0 300H400M100 0V400M200 0V400M300 0V400"/>
+  </g>
+  <!-- boundary glow -->
+  <rect x="6" y="6" width="388" height="388" rx="10" fill="none" stroke="#6a5dff" stroke-opacity=".5" stroke-width="3" filter="url(#g4)"/>
+  <rect x="6" y="6" width="388" height="388" rx="10" fill="none" stroke="#8ff6ff" stroke-opacity=".7" stroke-width="1.5"/>
+
+  <!-- orbit rings -->
+  <g transform="translate(200 172)" fill="none">
+    <circle r="86" stroke="#3df2ff" stroke-opacity=".22" stroke-width="1.5"/>
+    <circle r="58" stroke="#3df2ff" stroke-opacity=".3" stroke-width="1.5"/>
+    <!-- trails -->
+    <path d="M-86 0 A86 86 0 0 1 -60 -62" stroke="#3df2ff" stroke-width="9" stroke-linecap="round" stroke-opacity=".55" filter="url(#g2)"/>
+    <path d="M60 -41 A58 58 0 0 1 58 3" stroke="#3df2ff" stroke-width="7" stroke-linecap="round" stroke-opacity=".5" filter="url(#g2)"/>
+    <path d="M50 70 A86 86 0 0 1 8 86" stroke="#3df2ff" stroke-width="9" stroke-linecap="round" stroke-opacity=".5" filter="url(#g2)"/>
+    <!-- lightning between orbs -->
+    <path d="M-60 -62 L-44 -40 L-52 -28 L-30 -6 L-40 8 L-22 30" stroke="#b56bff" stroke-width="5" stroke-opacity=".6" filter="url(#g2)"/>
+    <path d="M-60 -62 L-44 -40 L-52 -28 L-30 -6 L-40 8 L-22 30" stroke="#fff" stroke-width="1.6"/>
+    <path d="M8 86 L20 66 L10 54 L26 38 L14 26" stroke="#b56bff" stroke-width="5" stroke-opacity=".6" filter="url(#g2)"/>
+    <path d="M8 86 L20 66 L10 54 L26 38 L14 26" stroke="#fff" stroke-width="1.6"/>
+  </g>
+  <!-- orbs -->
+  <g transform="translate(200 172)">
+    <g><circle cx="-60" cy="-62" r="18" fill="#3df2ff" opacity=".7" filter="url(#g4)"/><circle cx="-60" cy="-62" r="8" fill="#fff"/><circle cx="-60" cy="-62" r="10.5" fill="none" stroke="#3df2ff" stroke-width="2.5"/></g>
+    <g><circle cx="58" cy="3" r="16" fill="#3df2ff" opacity=".7" filter="url(#g4)"/><circle cx="58" cy="3" r="7" fill="#fff"/><circle cx="58" cy="3" r="9.5" fill="none" stroke="#3df2ff" stroke-width="2.5"/></g>
+    <g><circle cx="8" cy="86" r="18" fill="#3df2ff" opacity=".7" filter="url(#g4)"/><circle cx="8" cy="86" r="8" fill="#fff"/><circle cx="8" cy="86" r="10.5" fill="none" stroke="#3df2ff" stroke-width="2.5"/></g>
+    <g><circle cx="-14" cy="-56" r="12" fill="#5dff8a" opacity=".6" filter="url(#g4)"/><circle cx="-14" cy="-56" r="5.5" fill="#fff"/></g>
+  </g>
+  <!-- core -->
+  <circle cx="200" cy="172" r="38" fill="url(#core)"/>
+  <circle cx="200" cy="172" r="9" fill="#fff"/>
+  <circle cx="200" cy="172" r="15" fill="none" stroke="#8ff6ff" stroke-width="3"/>
+
+  <!-- enemies -->
+  <g stroke-width="3" stroke-linejoin="round">
+    <g transform="translate(78 92) rotate(30)"><polygon points="16,0 -13,13 -13,-13" fill="#ff3d9a" opacity=".55" filter="url(#g4)"/><polygon points="16,0 -13,13 -13,-13" fill="#0a0f2c" stroke="#ff3d9a"/></g>
+    <g transform="translate(320 92) rotate(160)"><polygon points="16,0 -13,13 -13,-13" fill="#ff3d9a" opacity=".55" filter="url(#g4)"/><polygon points="16,0 -13,13 -13,-13" fill="#0a0f2c" stroke="#ff3d9a"/></g>
+    <g transform="translate(58 196) rotate(-10)"><polygon points="20,0 -6,17 -14,0 -6,-17" fill="#ffe14a" opacity=".5" filter="url(#g4)"/><polygon points="20,0 -6,17 -14,0 -6,-17" fill="#0a0f2c" stroke="#ffe14a"/></g>
+    <g transform="translate(350 212)"><polygon points="16,0 8,14 -8,14 -16,0 -8,-14 8,-14" fill="#5dff8a" opacity=".5" filter="url(#g4)"/><polygon points="16,0 8,14 -8,14 -16,0 -8,-14 8,-14" fill="#0a0f2c" stroke="#5dff8a"/></g>
+    <g transform="translate(112 268)"><polygon points="17,17 -17,17 -17,-17 17,-17" fill="#ff8a3d" opacity=".5" filter="url(#g4)"/><polygon points="17,17 -17,17 -17,-17 17,-17" fill="#0a0f2c" stroke="#ff8a3d"/><path d="M26 -14 A30 30 0 0 1 26 14" fill="none" stroke="#7fe8ff" stroke-width="4" stroke-linecap="round" transform="rotate(-45)"/></g>
+    <g transform="translate(300 60)"><polygon points="14,0 10,10 0,14 -10,10 -14,0 -10,-10 0,-14 10,-10" fill="#4a8bff" opacity=".55" filter="url(#g4)"/><polygon points="14,0 10,10 0,14 -10,10 -14,0 -10,-10 0,-14 10,-10" fill="#0a0f2c" stroke="#4a8bff"/></g>
+    <g transform="translate(268 262) rotate(200)"><polygon points="16,0 -13,13 -13,-13" fill="#ff3d9a" opacity=".55" filter="url(#g4)"/><polygon points="16,0 -13,13 -13,-13" fill="#0a0f2c" stroke="#ff3d9a"/></g>
+  </g>
+  <!-- bullets + gems -->
+  <g><circle cx="130" cy="120" r="9" fill="#ff4055" opacity=".7" filter="url(#g2)"/><circle cx="130" cy="120" r="3.4" fill="#fff"/>
+     <circle cx="284" cy="128" r="9" fill="#4a8bff" opacity=".7" filter="url(#g2)"/><circle cx="284" cy="128" r="3.4" fill="#fff"/></g>
+  <g fill="#fff"><polygon points="150,232 155,239 150,246 145,239"/><polygon points="248,238 253,245 248,252 243,245"/><polygon points="312,168 317,175 312,182 307,175"/>
+     <polygon points="88,150 93,157 88,164 83,157"/></g>
+  <g fill="#3df2ff" opacity=".6" filter="url(#g2)"><circle cx="150" cy="239" r="7"/><circle cx="248" cy="245" r="7"/><circle cx="312" cy="175" r="7"/><circle cx="88" cy="157" r="7"/></g>
+  <!-- damage numbers -->
+  <g font-family="system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif" font-weight="800" text-anchor="middle">
+    <text x="118" y="150" font-size="17" fill="#fff">24</text><text x="270" y="192" font-size="21" fill="#ffd35a">48</text><text x="240" y="98" font-size="15" fill="#fff">17</text>
+  </g>
+  <!-- title -->
+  <g font-family="system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif" font-weight="900" text-anchor="middle">
+    <text x="200" y="336" font-size="54" fill="#3df2ff" filter="url(#g8)" opacity=".8">ORBIT</text>
+    <text x="200" y="336" font-size="54" fill="url(#t1)">ORBIT</text>
+    <text x="200" y="372" font-size="29" letter-spacing="6" fill="#ff3d9a" filter="url(#g8)" opacity=".8">SURVIVORS</text>
+    <text x="200" y="372" font-size="29" letter-spacing="6" fill="url(#t2)">SURVIVORS</text>
+  </g>
+</svg>

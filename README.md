@@ -18,7 +18,7 @@ Requirements: **Node.js 20.12+** (22 recommended). Nothing else: the database is
 ```bash
 npm install          # also copies the Monaco editor into public/monaco
 cp .env.example .env # optional, every setting has a default
-npm run setup        # create the database and seed 6 games + demo users
+npm run setup        # create the database and seed 10 games + demo users
 npm run dev          # site on http://localhost:3002, game server on http://localhost:3001
 ```
 
@@ -52,7 +52,7 @@ To start over, stop the server and delete the `.data/` folder, then run `npm run
 | "Start from a template" game | `templates/starter` |
 | End-to-end tests | `e2e/` |
 
-### The six seed games
+### The seed games
 
 Brick Blitz (breakout with power-ups), Neon Serpent (snake), Tile Fusion (2048-style merge), Sky Hopper (endless platformer), Neon Drift (traffic racer) and Gem Swap (timed match-3). All original, dependency-free canvas games that use the SDK for scores.
 
@@ -131,7 +131,7 @@ One Railway service runs both servers from the `Dockerfile`, with a Railway Post
    | `PORT` | `8080` |
    | `APP_ORIGIN` | `https://<site domain>` |
    | `NEXT_PUBLIC_PLAY_ORIGIN` | `https://<game domain>` |
-   | `SEED_DEMO` | `true` (loads the 6 games + demo users once) |
+   | `SEED_DEMO` | `true` (loads the 10 games + demo users; new seed games are added on later deploys) |
    | `SEED_ADMIN_PASSWORD` | a strong password for the `arcadia` admin account |
    | `STRIPE_SECRET_KEY`, `STRIPE_PRICE_MONTHLY`, `STRIPE_PRICE_YEARLY`, `STRIPE_WEBHOOK_SECRET` | from Stripe (below) |
 

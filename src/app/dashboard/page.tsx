@@ -33,9 +33,9 @@ export default async function Dashboard() {
   const totalMinutes = [...minutes.values()].reduce((a, b) => a + b.seconds, 0) / 60;
 
   return (
-    <div className="mt-10 space-y-10">
-      <div>
-        <h1 className="h-display text-3xl font-extrabold">Creator dashboard</h1>
+    <div className="space-y-8">
+      <div className="card px-5 py-4">
+        <h1 className="retro-title-dark text-3xl">Creator dashboard</h1>
         <p className="text-muted">This month ({month}). Earnings are estimates until the month closes and payouts run.</p>
       </div>
 
@@ -46,7 +46,7 @@ export default async function Dashboard() {
       </div>
 
       <section>
-        <h2 className="h-display mb-3 text-xl font-bold">Pull requests waiting for you</h2>
+        <h2 className="section-head mb-3">Pull requests waiting for you</h2>
         {incoming.length ? (
           <ul className="card divide-y divide-line">
             {incoming.map(({ pr, author, game }) => (
@@ -113,10 +113,12 @@ export default async function Dashboard() {
 
 function Stat({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (
-    <div className="card p-5">
-      <p className="text-sm text-muted">{label}</p>
-      <p className="h-display mt-1 text-3xl font-black">{value}</p>
-      {hint && <p className="mt-1 text-xs text-dim">{hint}</p>}
+    <div className="box">
+      <p className="box-title !text-sm">{label}</p>
+      <div className="p-4">
+        <p className="retro-title-dark text-3xl">{value}</p>
+        {hint && <p className="mt-1 text-xs text-dim">{hint}</p>}
+      </div>
     </div>
   );
 }

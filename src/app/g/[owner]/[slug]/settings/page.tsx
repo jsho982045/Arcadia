@@ -55,7 +55,7 @@ export default async function SettingsPage({ params, searchParams }: { params: P
           </select>
         </div>
         <label className="flex items-center gap-2 text-sm">
-          <input type="checkbox" name="allowPrs" defaultChecked={game.allowPrs} className="accent-[#7c5cff]" /> Accept forks and pull requests
+          <input type="checkbox" name="allowPrs" defaultChecked={game.allowPrs} className="accent-[#f07800]" /> Accept forks and pull requests
         </label>
         <div>
           <label className="label" htmlFor="contributorShare">Contributor share of this game&apos;s earnings: {game.contributorShare}%</label>

@@ -70,7 +70,7 @@ export default async function CodePage({ params, searchParams }: { params: Promi
             </code>
           </pre>
         ) : isImage ? (
-          <div className="flex justify-center bg-[repeating-conic-gradient(#1d1934_0%_25%,#151226_0%_50%)] bg-[length:20px_20px] p-8">
+          <div className="flex justify-center bg-[repeating-conic-gradient(#dbe8f6_0%_25%,#ffffff_0%_50%)] bg-[length:20px_20px] p-8">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={`${config.playOrigin}/v/${version.id}/${selected}`} alt={selected} className="max-h-[60vh]" />
           </div>
