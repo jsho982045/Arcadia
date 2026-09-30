@@ -1,0 +1,14 @@
+{
+  "title": "Royal Chess",
+  "category": "strategy",
+  "tags": [
+    "chess",
+    "board-game",
+    "vs-computer",
+    "two-player"
+  ],
+  "orientation": "portrait",
+  "description": "Full-rules chess with castling, en passant, promotion and every draw rule. Play the computer at four difficulty levels, from Easy to Master, or pass the phone and play a friend.",
+  "instructions": "Tap a piece then a highlighted square, or drag a piece to move it. Pick your side and difficulty from the menu. Undo, flip the board or start a new game with the buttons below the board.",
+  "thumbnail": "thumb.svg"
+}

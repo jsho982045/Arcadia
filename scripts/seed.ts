@@ -27,7 +27,7 @@ async function mkUser(username: string, displayName: string, password: string, e
   return u;
 }
 
-const SEED_GAMES = ["phase-runner", "orbit-survivors", "ghost-lap", "chain-bloom", "brick-blitz", "neon-serpent", "tile-fusion", "sky-hopper", "neon-drift", "gem-swap"];
+const SEED_GAMES = ["phase-runner", "orbit-survivors", "ghost-lap", "chain-bloom", "brick-blitz", "neon-serpent", "tile-fusion", "sky-hopper", "neon-drift", "gem-swap", "royal-chess", "checkers-classic", "backgammon-club"];
 
 /** Existing installs: publish any seed games that were added after the first seed. */
 async function topUp(team: typeof users.$inferSelect) {

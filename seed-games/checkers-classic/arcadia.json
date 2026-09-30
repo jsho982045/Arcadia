@@ -1,0 +1,15 @@
+{
+  "title": "Checkers Classic",
+  "category": "strategy",
+  "tags": [
+    "checkers",
+    "draughts",
+    "board-game",
+    "vs-computer",
+    "two-player"
+  ],
+  "orientation": "portrait",
+  "description": "Classic English checkers (American draughts) on a wooden board. Capture is mandatory, jumps chain, and kings fly both ways. Play the computer at four difficulty levels or pass the phone to a friend.",
+  "instructions": "Tap a piece, then tap a highlighted square (or drag it there). If a capture is available you must take it, and keep jumping with the same piece until the chain ends. Black moves first.",
+  "thumbnail": "thumb.svg"
+}

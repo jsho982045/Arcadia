@@ -1,0 +1,15 @@
+{
+  "title": "Backgammon Club",
+  "category": "strategy",
+  "tags": [
+    "backgammon",
+    "dice",
+    "board-game",
+    "vs-computer",
+    "two-player"
+  ],
+  "orientation": "portrait",
+  "description": "Classic backgammon with a leather-and-wood board. Race your 15 checkers home, hit blots, and win gammons in matches to 1, 3 or 5 points. Play the computer (Easy, Medium or Hard) or pass-and-play with a friend, with an optional doubling cube.",
+  "instructions": "Tap Roll Dice, then tap a checker to see where it can go and tap a destination (or drag the checker there). Tap a selected checker again to auto-play its biggest die, or use Undo to take back a move. You must use as many dice as you can, enter from the bar first, and can bear off only when all 15 checkers are home. Your turn ends automatically when no legal moves remain. Gammon scores 2 and backgammon 3. With the doubling cube on, tap Double before rolling to raise the stakes; your opponent may take or drop.",
+  "thumbnail": "thumb.svg"
+}
