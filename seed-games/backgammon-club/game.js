@@ -1,7 +1,7 @@
 // Backgammon Club — an Arcadia seed game. Rules and AI live in engine.js (window.BG); this file is the canvas UI.
 (() => {
   const E = window.BG;
-  const W = 420, H = 880;
+  const W = 420, H = 800;
   const c = document.getElementById("c");
   const ctx = c.getContext("2d");
   let scale = 1, dpr = 1, boardLayer = null;
@@ -15,13 +15,15 @@
   addEventListener("resize", fit); fit();
 
   // ---------- layout ----------
-  const PH = 45, R = 19, BX = 6, BY = 112, BW = 408, PAD = 14, QH = PH * 6, BAND = 72;
+  const PW = 30, R = 13, BX = 6, BY = 112, BW = 408, PAD = 14, QH = 232, BAND = 72;
   const Y0 = BY + PAD, BANDY = Y0 + QH, Y1 = BANDY + BAND, BH = PAD * 2 + QH * 2 + BAND;
-  const LX0 = 18, RX0 = 402, TLEN = 172, SPINE0 = 198, SPINE1 = 222;
+  const LX0 = 15, RX0 = 405, SPINE0 = 195, SPINE1 = 225, MIDX = 210;
   const TOP_Y = 60, STRIP_H = 48, BOT_Y = BY + BH + 4, BTN_Y = BOT_Y + STRIP_H + 8, BTN_H = 54;
-  const rowOf = (i) => (i <= 11 ? 11 - i : i - 12), colOf = (i) => (i <= 11 ? 0 : 1);
-  const rowY = (r) => (r < 6 ? Y0 + r * PH : Y1 + (r - 6) * PH);
-  const ptY = (i) => rowY(rowOf(i)) + PH / 2;
+  // upright board, seen from White's seat: points 1-12 run along the near (bottom) edge right-to-left, 13-24 along the far edge left-to-right
+  const isTop = (i) => i >= 12;
+  const colOf = (i) => (i >= 12 ? i - 12 : 11 - i);
+  const colX = (c) => (c < 6 ? LX0 + c * PW : SPINE1 + (c - 6) * PW);
+  const ptX = (i) => colX(colOf(i)) + PW / 2;
   const TRAY_X = 214, TRAY_W = 192;
   const stripY = (p) => (p === 1 ? TOP_Y : BOT_Y);
 
@@ -197,30 +199,25 @@
   // ---------- geometry ----------
   function slotXY(key, i, n) {
     if (key[0] === "p") {
-      const idx = +key.slice(1), col = colOf(idx);
-      const sp = Math.min(2 * R + 1, (TLEN - 2 * R - 10) / Math.max(1, n - 1));
-      const bx = col === 0 ? LX0 + R + 4 : RX0 - R - 4;
-      return { x: bx + (col === 0 ? 1 : -1) * i * sp, y: ptY(idx) };
+      const idx = +key.slice(1);
+      const sp = Math.min(2 * R + 1, (QH - 2 * R - 12) / Math.max(1, n - 1));
+      const off = R + 5 + i * sp;
+      return { x: ptX(idx), y: isTop(idx) ? Y0 + off : Y0 + 2 * QH + BAND - off };
     }
     if (key.slice(0, 3) === "bar") {
-      const p = +key[3], sp = Math.min(2 * R + 2, (106 - 2 * R - 8) / Math.max(1, n - 1));
-      return { x: p === 0 ? 24 + R + 3 + i * sp : W - 24 - R - 3 - i * sp, y: BANDY + BAND / 2 };
+      const p = +key[3], sp = Math.min(2 * R + 2, (QH - 2 * R - 12) / Math.max(1, n - 1)), off = 18 + R + i * sp, my = BANDY + BAND / 2;
+      return { x: MIDX, y: p === 0 ? my + off : my - off };
     }
     const p = +key[3]; // off tray
     return { x: TRAY_X + 8 + (i + 0.5) * ((TRAY_W - 16) / 15), y: stripY(p) + STRIP_H / 2, flat: true };
   }
   function hitTest(x, y) {
     for (let p = 0; p < 2; p++) if (y >= stripY(p) && y <= stripY(p) + STRIP_H && x >= 130) return { kind: "off", p };
-    if (y >= BANDY && y < Y1) {
-      if (x < 136) return { kind: "bar", p: 0 };
-      if (x > 284) return { kind: "bar", p: 1 };
-      return { kind: "dice" };
-    }
-    let r = -1;
-    if (y >= Y0 && y < BANDY) r = Math.floor((y - Y0) / PH); else if (y >= Y1 && y < Y1 + QH) r = 6 + Math.floor((y - Y1) / PH);
-    if (r < 0 || x < BX || x > BX + BW) return null;
-    const col = x < W / 2 ? 0 : 1;
-    return { kind: "pt", idx: col === 0 ? 11 - r : 12 + r };
+    if (y < Y0 || y > Y0 + 2 * QH + BAND || x < LX0 || x > RX0) return null;
+    if (x >= SPINE0 && x <= SPINE1) return { kind: "bar", p: y > BANDY + BAND / 2 ? 0 : 1 };
+    if (y >= BANDY && y < Y1) return { kind: "dice" };
+    const c = x < SPINE0 ? Math.floor((x - LX0) / PW) : 6 + Math.floor((x - SPINE1) / PW);
+    return { kind: "pt", idx: y < BANDY ? 12 + c : 11 - c };
   }
 
   // ---------- selection / destinations ----------
@@ -398,11 +395,12 @@
     }
     // triangles
     for (let i = 0; i < 24; i++) {
-      const col = colOf(i), r = rowOf(i), y = rowY(r), bx = col === 0 ? LX0 : RX0, tx = col === 0 ? LX0 + TLEN : RX0 - TLEN;
-      const light = r % 2 === 0;
-      const tg = g.createLinearGradient(bx, 0, tx, 0);
+      const top = isTop(i), c = colOf(i), x = colX(c);
+      const by = top ? Y0 : Y0 + 2 * QH + BAND, ty = top ? Y0 + QH : Y0 + QH + BAND;
+      const light = (c + (top ? 0 : 1)) % 2 === 0;
+      const tg = g.createLinearGradient(0, by, 0, ty);
       if (light) { tg.addColorStop(0, "#f0dcae"); tg.addColorStop(1, "#c9ae76"); } else { tg.addColorStop(0, "#a2432f"); tg.addColorStop(1, "#6b2418"); }
-      g.fillStyle = tg; g.beginPath(); g.moveTo(bx, y + 1.5); g.lineTo(tx, y + PH / 2); g.lineTo(bx, y + PH - 1.5); g.closePath(); g.fill();
+      g.fillStyle = tg; g.beginPath(); g.moveTo(x + 1.5, by); g.lineTo(x + PW / 2, ty); g.lineTo(x + PW - 1.5, by); g.closePath(); g.fill();
       g.strokeStyle = "rgba(0,0,0,.28)"; g.lineWidth = 1; g.stroke();
     }
     // spine
@@ -410,18 +408,10 @@
     g.fillStyle = sg; g.fillRect(SPINE0, BY + 4, SPINE1 - SPINE0, BH - 8);
     g.strokeStyle = "rgba(0,0,0,.45)"; g.lineWidth = 1; g.strokeRect(SPINE0 + 0.5, BY + 4.5, SPINE1 - SPINE0 - 1, BH - 9);
     g.fillStyle = "rgba(255,220,160,.25)"; g.fillRect(SPINE0 + 2, BY + 4, 2, BH - 8);
-    // bar slots
-    for (let p = 0; p < 2; p++) {
-      const x = p === 0 ? 22 : W - 22 - 106, y = BANDY + 5;
-      g.fillStyle = "rgba(0,0,0,.35)"; rr(g, x, y, 106, BAND - 10, 10); g.fill();
-      g.strokeStyle = "rgba(215,175,110,.25)"; g.lineWidth = 1; rr(g, x, y, 106, BAND - 10, 10); g.stroke();
-      g.fillStyle = "rgba(230,200,150,.22)"; g.font = "800 10px system-ui"; g.textAlign = "center"; g.textBaseline = "middle";
-      g.fillText("BAR", x + 53, y + BAND - 10 - 9);
-    }
   }
   function triPath(g, i) {
-    const col = colOf(i), y = rowY(rowOf(i)), bx = col === 0 ? LX0 : RX0, tx = col === 0 ? LX0 + TLEN : RX0 - TLEN;
-    g.beginPath(); g.moveTo(bx, y + 1.5); g.lineTo(tx, y + PH / 2); g.lineTo(bx, y + PH - 1.5); g.closePath();
+    const top = isTop(i), x = colX(colOf(i)), by = top ? Y0 : Y0 + 2 * QH + BAND, ty = top ? Y0 + QH : Y0 + QH + BAND;
+    g.beginPath(); g.moveTo(x + 1.5, by); g.lineTo(x + PW / 2, ty); g.lineTo(x + PW - 1.5, by); g.closePath();
   }
   function checker(g, x, y, r, p, o) {
     o = o || {};
@@ -509,10 +499,10 @@
       }
     }
     // point numbers
-    ctx.font = "800 10px system-ui"; ctx.textBaseline = "middle"; ctx.textAlign = "center";
+    ctx.font = "800 9px system-ui"; ctx.textBaseline = "middle"; ctx.textAlign = "center";
     for (let i = 0; i < 24; i++) {
       ctx.fillStyle = "rgba(255,232,190,.7)";
-      ctx.fillText(String(E.pointNo(viewer, i)), colOf(i) === 0 ? BX + 8 : BX + BW - 8, ptY(i));
+      ctx.fillText(String(E.pointNo(viewer, i)), ptX(i), isTop(i) ? Y0 - 6 : Y0 + 2 * QH + BAND + 6);
     }
     // checkers on points
     const glowT = 0.5 + 0.5 * Math.sin(t * 5);
@@ -600,7 +590,7 @@
     }
   }
   function drawDiceArea() {
-    const cx = W / 2, cy = BANDY + BAND / 2;
+    const cx = (SPINE1 + RX0) / 2, cy = BANDY + BAND / 2;
     if (diceAnim) {
       const a = diceAnim, u = Math.min(1, a.t / a.dur), n = 2, size = 42;
       const who = a.opening ? null : G.turn;
@@ -735,6 +725,6 @@
     requestAnimationFrame(loop);
   }
   // Debug/test hook (harmless in production)
-  window.__bg = { force(st, turn, dice) { tok++; timers = []; flights = []; hidden = {}; G.s = st; G.turn = turn; G.dice = dice; G.openDice = false; G.played = []; G.undo = []; G.queue = false; beginMoves(); }, offerDouble, endGame, get G() { return G; }, get phase() { return phase; }, get sel() { return sel; }, get ui() { return ui; }, cfg, slotXY, ptY, hitTest, ptXY: (i) => slotXY("p" + i, 0, 1), BANDY, BTN_Y, BOT_Y, TOP_Y, H, W, set paused(v) { paused = v; }, set speed(v) { speed = v; } };
+  window.__bg = { force(st, turn, dice) { tok++; timers = []; flights = []; hidden = {}; G.s = st; G.turn = turn; G.dice = dice; G.openDice = false; G.played = []; G.undo = []; G.queue = false; beginMoves(); }, offerDouble, endGame, get G() { return G; }, get phase() { return phase; }, get sel() { return sel; }, get ui() { return ui; }, cfg, slotXY, hitTest, ptXY: (i) => slotXY("p" + i, 0, 1), BANDY, BTN_Y, BOT_Y, TOP_Y, H, W, set paused(v) { paused = v; }, set speed(v) { speed = v; } };
   requestAnimationFrame(loop);
 })();

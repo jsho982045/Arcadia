@@ -3,7 +3,7 @@
 (() => {
   const c = document.getElementById("c");
   if (!c) return;
-  const TILT = 24; // degrees
+  const TILT = 30; // degrees
   function apply() {
     const h = c.offsetHeight || 800;
     c.style.transformOrigin = "50% 100%";

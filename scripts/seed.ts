@@ -29,16 +29,27 @@ async function mkUser(username: string, displayName: string, password: string, e
 
 const SEED_GAMES = ["phase-runner", "orbit-survivors", "ghost-lap", "chain-bloom", "brick-blitz", "neon-serpent", "tile-fusion", "sky-hopper", "neon-drift", "gem-swap", "royal-chess", "checkers-classic", "backgammon-club"];
 
-/** Existing installs: publish any seed games that were added after the first seed. */
+/** Existing installs: publish seed games added after the first seed, and push a new version when a seed game's files changed. */
 async function topUp(team: typeof users.$inferSelect) {
-  const have = await db.select({ title: games.title }).from(games).where(eq(games.ownerId, team.id));
-  const titles = new Set(have.map((g) => g.title));
+  const have = await db.select().from(games).where(eq(games.ownerId, team.id));
+  const byTitle = new Map(have.map((g) => [g.title, g]));
   for (const slug of SEED_GAMES) {
     const files = readDir(path.join("seed-games", slug));
     const title = JSON.parse(files["arcadia.json"].toString("utf8")).title;
-    if (titles.has(title)) continue;
-    const g = await createGame({ owner: team, files, isSeed: true, publishNow: true });
-    console.log("Added", g.title);
+    const existing = byTitle.get(title);
+    if (!existing) {
+      const g = await createGame({ owner: team, files, isSeed: true, publishNow: true });
+      console.log("Added", g.title);
+      continue;
+    }
+    if (!existing.currentVersionId) continue;
+    const cur = await getVersion(existing.currentVersionId);
+    if (!cur) continue;
+    const curFiles = await loadTreeFiles(cur.tree);
+    const same = Object.keys(files).length === Object.keys(curFiles).length && Object.entries(files).every(([k, b]) => curFiles[k] && curFiles[k].equals(b));
+    if (same) continue;
+    await createVersion({ gameId: existing.id, authorId: team.id, message: "Update", files, parentVersionId: cur.id });
+    console.log("Updated", title);
   }
 }
 
